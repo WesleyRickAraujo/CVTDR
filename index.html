@@ -33,12 +33,6 @@
         .z-front   { z-index: 50; }   /* Bolo (Frente de tudo) */
         .z-ui      { z-index: 100; }  /* Interface do usuário */
 
-        /* Masking for photo integration */
-        .photo-mask {
-            mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
-            -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
-        }
-
         /* Animations */
         @keyframes revealTitle { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
         @keyframes jump2 { 0%, 100% { transform: rotate(-8deg) translateY(0); } 50% { transform: rotate(-10deg) translateY(-12px); } }
@@ -85,7 +79,7 @@
     <!-- MAIN COMPOSITION -->
     <main id="app-container" class="relative w-full max-w-sm transition-all duration-1000 opacity-0 translate-y-6 scale-95 mt-4 mb-10">
         
-        <!-- Scrapbook Card - TEXTURA REMOVIDA PARA GARANTIR VISIBILIDADE DA MOLDURA -->
+        <!-- Scrapbook Card -->
         <div class="relative shadow-2xl rounded-[2.5rem] overflow-hidden border-[10px] border-white bg-white aspect-[3/5]">
             
             <!-- CAMADA 1: MOLDURA JPG (Fundo) -->
@@ -95,28 +89,28 @@
             <img src="num2.png" class="absolute top-[38%] left-[2%] w-36 md:w-44 anim-jump-2 opacity-95 z-numeros" alt="2">
             <img src="num6.png" class="absolute top-[36%] right-[2%] w-36 md:w-44 anim-jump-6 opacity-95 z-numeros" alt="6">
 
-            <!-- CAMADA 4: TÍTULO -->
+            <!-- CAMADA 4: TÍTULO (Garantido à frente da moldura) -->
             <header class="absolute top-[18%] inset-x-0 text-center z-title px-4 pointer-events-none">
                 <h2 class="text-[#B22222] font-serif-title text-4xl md:text-5xl italic leading-tight drop-shadow-sm">
                     Deborah's Birthday
                 </h2>
             </header>
 
-            <!-- CAMADA 3: ANIVERSARIANTE -->
+            <!-- CAMADA 3: ANIVERSARIANTE (Pura e Original) -->
             <figure class="absolute inset-0 flex items-center justify-center z-person pointer-events-none">
-                <div class="relative mt-44 photo-mask">
-                    <img src="deborah.png" class="w-32 md:w-40 drop-shadow-[0_20px_40px_rgba(0,0,0,0.4)]" alt="Deborah">
+                <div class="relative mt-44">
+                    <!-- Removido 'photo-mask' e 'drop-shadow' para manter a imagem original -->
+                    <img src="deborah.png" class="w-32 md:w-40" alt="Deborah">
                 </div>
             </figure>
 
-            <!-- CAMADA 5: BOLO (Estático e 5/7 do tamanho anterior) -->
+            <!-- CAMADA 5: BOLO (Frente de tudo) -->
             <img src="bolo.png" class="absolute bottom-[-0.5rem] left-1/2 -translate-x-1/2 w-32 md:w-40 drop-shadow-2xl z-front" alt="Bolo">
         </div>
 
-        <!-- RSVP SECTION (Sessão Invertida e Vibrante) -->
+        <!-- RSVP SECTION (Invertida e Vibrante) -->
         <section class="w-full mt-8 bg-[#B22222] p-8 md:p-10 rounded-[3rem] shadow-2xl border border-white/10 relative z-ui text-white">
             
-            <!-- Info Header -->
             <div class="text-center mb-8 pb-6 border-b border-white/20">
                 <p class="font-serif-title text-3xl italic tracking-wide">Di Fiori</p>
                 <div class="flex justify-center items-center gap-4 mt-3">
@@ -126,7 +120,6 @@
                 </div>
             </div>
 
-            <!-- Interaction View -->
             <div id="rsvp-interface">
                 <div class="text-center mb-8">
                     <h2 class="text-white font-bold text-2xl uppercase tracking-[0.2em] font-serif-title italic">Confirmação</h2>
@@ -157,7 +150,6 @@
                     </button>
                 </form>
 
-                <!-- Location Access -->
                 <footer class="mt-10 pt-8 border-t border-white/20 text-center">
                     <p class="text-[10px] text-white/50 uppercase font-bold tracking-[0.2em] mb-3">Localização</p>
                     <p class="text-white/80 text-[11px] leading-relaxed mb-6 px-4 font-light italic">
@@ -172,7 +164,6 @@
                 </footer>
             </div>
 
-            <!-- Success State -->
             <div id="success-state" class="hidden-view text-center py-10">
                 <div class="flex justify-center mb-6">
                     <svg width="70" height="70" viewBox="0 0 24 24" fill="white">
@@ -317,4 +308,3 @@
     </script>
 </body>
 </html>
-
