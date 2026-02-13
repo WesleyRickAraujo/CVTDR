@@ -13,7 +13,7 @@
         :root {
             --brand-red: #B22222;
             --sand-bg: #FDF5E6;
-            --off-white: #fffcfc;
+            --pure-white: #fffcfc;
         }
 
         body { 
@@ -26,36 +26,33 @@
 
         .font-serif-title { font-family: 'Cormorant Garamond', serif; }
 
-        /* Sandy Texture Overlay */
-        .card-texture::before {
-            content: "";
+        /* Sandy Texture - Aplicada de forma que não bloqueie a moldura */
+        .card-texture-overlay {
             position: absolute;
             inset: 0;
             background-image: url("https://www.transparenttextures.com/patterns/sandpaper.png");
             background-size: 200px;
-            opacity: 0.15;
+            opacity: 0.1; /* Subtil para não esconder o JPG */
             pointer-events: none;
-            z-index: 2; /* Acima da moldura, abaixo do conteúdo */
+            z-index: 25; /* Acima das fotos, abaixo da UI */
         }
 
         /* Hierarchy Management (Strict Z-Index) */
-        .layer-1 { z-index: 1; }   /* Moldura (Background) */
-        .layer-5 { z-index: 5; }   /* Numeros (Middle-back) */
-        .layer-10 { z-index: 10; } /* Title & Text */
-        .layer-15 { z-index: 15; } /* Deborah (Focus) */
-        .layer-20 { z-index: 20; } /* Bolo (Front) */
-        .layer-ui { z-index: 50; } /* Buttons/Modals */
+        .layer-base { z-index: 1; }   /* Moldura JPG */
+        .layer-mid { z-index: 10; }   /* Números e Deborah */
+        .layer-top { z-index: 20; }   /* Bolo e Título */
+        .layer-ui { z-index: 50; }    /* Interface/Botões */
 
-        /* Masking & Special Effects */
+        /* Masking for photo integration */
         .photo-mask {
             mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
             -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
         }
 
         /* Animations */
-        @keyframes revealTitle { from { opacity:0; letter-spacing: 0.5em; transform: translateY(10px); } to { opacity:1; letter-spacing: 0.1em; transform: translateY(0); } }
-        @keyframes jump2 { 0%, 100% { transform: rotate(-8deg) translateY(0); } 50% { transform: rotate(-10deg) translateY(-15px); } }
-        @keyframes jump6 { 0%, 100% { transform: rotate(8deg) translateY(0); } 50% { transform: rotate(10deg) translateY(-20px); } }
+        @keyframes revealTitle { from { opacity:0; letter-spacing: 0.4em; transform: translateY(10px); } to { opacity:1; letter-spacing: 0.1em; transform: translateY(0); } }
+        @keyframes jump2 { 0%, 100% { transform: rotate(-8deg) translateY(0); } 50% { transform: rotate(-10deg) translateY(-12px); } }
+        @keyframes jump6 { 0%, 100% { transform: rotate(8deg) translateY(0); } 50% { transform: rotate(10deg) translateY(-18px); } }
         @keyframes introOut { 0% { opacity: 1; } 90% { opacity: 1; } 100% { opacity: 0; visibility: hidden; pointer-events: none; } }
         @keyframes floatUp { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; } }
 
@@ -67,19 +64,19 @@
         
         .hidden-view { display: none !important; }
 
-        /* Sophisticated Inputs */
-        .rsvp-input {
+        /* Sophisticated Inverted Inputs */
+        .rsvp-input-inverted {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
             color: white;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
         }
-        .rsvp-input:focus {
+        .rsvp-input-inverted:focus {
             background: rgba(255, 255, 255, 0.2);
             border-color: white;
             outline: none;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
+        .rsvp-input-inverted::placeholder { color: rgba(255, 255, 255, 0.4); }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center p-4">
@@ -99,48 +96,50 @@
     <main id="app-container" class="relative w-full max-w-sm transition-all duration-1000 opacity-0 translate-y-6 scale-95 mt-4 mb-10">
         
         <!-- Scrapbook Card -->
-        <div class="relative shadow-2xl rounded-[2.5rem] overflow-hidden border-[10px] border-white bg-white aspect-[3/5] card-texture">
+        <div class="relative shadow-2xl rounded-[2.5rem] overflow-hidden border-[10px] border-white bg-[#fffcfc] aspect-[3/5]">
             
-            <!-- LAYER 1: MOLDURA (Plano de Fundo) -->
-            <img src="moldura.jpg" class="absolute inset-0 w-full h-full object-fill layer-1 pointer-events-none" alt="Moldura">
-            
-            <!-- LAYER 5: NÚMEROS (À frente da moldura) -->
-            <img src="num2.png" class="absolute top-[38%] left-[2%] w-40 md:w-44 anim-jump-2 opacity-95 layer-5" alt="2">
-            <img src="num6.png" class="absolute top-[36%] right-[2%] w-40 md:w-44 anim-jump-6 opacity-95 layer-5" alt="6">
+            <!-- TEXTURA ARENOSA (Overlay) -->
+            <div class="card-texture-overlay"></div>
 
-            <!-- LAYER 10: TÍTULO -->
-            <header class="absolute top-[20%] inset-x-0 text-center layer-10 px-4 pointer-events-none">
+            <!-- LAYER 1: MOLDURA JPG (Fundo Real) -->
+            <img src="moldura.jpg" class="absolute inset-0 w-full h-full object-fill layer-base pointer-events-none" alt="Moldura">
+            
+            <!-- LAYER 10: NÚMEROS (Mais baixos para dar espaço ao título) -->
+            <img src="num2.png" class="absolute top-[38%] left-[2%] w-36 md:w-44 anim-jump-2 opacity-95 layer-mid" alt="2">
+            <img src="num6.png" class="absolute top-[36%] right-[2%] w-36 md:w-44 anim-jump-6 opacity-95 layer-mid" alt="6">
+
+            <!-- LAYER 20: TÍTULO -->
+            <header class="absolute top-[18%] inset-x-0 text-center layer-top px-4 pointer-events-none">
                 <h2 class="text-[#B22222] font-serif-title text-4xl md:text-5xl italic leading-tight drop-shadow-sm">
                     Deborah's Birthday
                 </h2>
             </header>
 
             <!-- LAYER 15: ANIVERSARIANTE -->
-            <figure class="absolute inset-0 flex items-center justify-center layer-15 pointer-events-none">
+            <figure class="absolute inset-0 flex items-center justify-center layer-mid pointer-events-none">
                 <div class="relative mt-44 photo-mask">
                     <img src="deborah.png" class="w-32 md:w-40 drop-shadow-[0_20px_40px_rgba(0,0,0,0.4)]" alt="Deborah">
                 </div>
             </figure>
 
             <!-- LAYER 20: BOLO (Escala 5/7, Estático) -->
-            <!-- Reduzido para cerca de 71% da largura do card para dar o respiro solicitado -->
-            <img src="bolo.png" class="absolute bottom-[-0.5rem] left-1/2 -translate-x-1/2 w-44 md:w-52 drop-shadow-2xl layer-20" alt="Bolo">
+            <img src="bolo.png" class="absolute bottom-[-0.5rem] left-1/2 -translate-x-1/2 w-40 md:w-48 drop-shadow-2xl layer-top" alt="Bolo">
         </div>
 
-        <!-- RSVP SECTION (Inverted Colors: Red Background) -->
+        <!-- RSVP SECTION (Inverted: Red Background, White Text) -->
         <section class="w-full mt-8 bg-[#B22222] p-8 md:p-10 rounded-[3rem] shadow-2xl border border-white/10 relative layer-ui text-white">
             
-            <!-- Event Highlights -->
+            <!-- Info Header -->
             <div class="text-center mb-8 pb-6 border-b border-white/20">
                 <p class="font-serif-title text-3xl italic tracking-wide">Di Fiori</p>
                 <div class="flex justify-center items-center gap-4 mt-3">
-                    <span class="text-white/80 text-xs font-bold tracking-widest uppercase">Dia 20</span>
+                    <span class="text-white/90 text-xs font-bold tracking-widest uppercase">Dia 20</span>
                     <span class="w-1.5 h-1.5 bg-white/40 rounded-full"></span>
-                    <span class="text-white/80 text-xs font-bold tracking-widest uppercase">18:30h</span>
+                    <span class="text-white/90 text-xs font-bold tracking-widest uppercase">18:30h</span>
                 </div>
             </div>
 
-            <!-- RSVP Interface -->
+            <!-- Interaction View -->
             <div id="rsvp-interface">
                 <div class="text-center mb-8">
                     <h2 class="text-white font-bold text-2xl uppercase tracking-[0.2em] font-serif-title italic">Confirmação</h2>
@@ -149,21 +148,21 @@
                 <form id="rsvp-form" class="space-y-5">
                     <input 
                         type="text" id="guest-name" placeholder="Escreva o seu nome completo" required
-                        class="w-full p-4 rsvp-input text-center text-lg font-light placeholder:text-white/30 rounded-2xl"
+                        class="w-full p-4 rsvp-input-inverted text-center text-lg font-light rounded-2xl"
                     >
 
                     <div class="flex gap-3">
                         <button type="button" id="toggle-solo" class="flex-1 py-3.5 rounded-full border border-white/20 font-serif-title font-bold text-xs tracking-[0.1em] transition-all bg-white text-[#B22222] shadow-xl">
                             INDIVIDUAL
                         </button>
-                        <button type="button" id="toggle-group" class="flex-1 py-3.5 rounded-full border border-white/20 font-serif-title font-bold text-xs tracking-[0.1em] transition-all text-white hover:bg-white/5">
+                        <button type="button" id="toggle-group" class="flex-1 py-3.5 rounded-full border border-white/20 font-serif-title font-bold text-xs tracking-[0.1em] transition-all text-white hover:bg-white/10">
                             + FAMÍLIA
                         </button>
                     </div>
 
                     <textarea 
-                        id="guest-others" rows="2" placeholder="Nomes dos acompanhantes (separados por vírgula)"
-                        class="hidden w-full p-4 rsvp-input rounded-2xl text-sm placeholder:text-white/30"
+                        id="guest-others" rows="2" placeholder="Nomes dos acompanhantes..."
+                        class="hidden w-full p-4 rsvp-input-inverted rounded-2xl text-sm"
                     ></textarea>
 
                     <button type="submit" id="submit-btn" class="w-full bg-white text-[#B22222] py-5 rounded-full font-serif-title font-bold text-sm tracking-[0.4em] shadow-2xl active:scale-95 transition-all uppercase mt-2">
@@ -171,56 +170,54 @@
                     </button>
                 </form>
 
-                <!-- Footer Info -->
+                <!-- Location Access -->
                 <footer class="mt-10 pt-8 border-t border-white/20 text-center">
                     <p class="text-[10px] text-white/50 uppercase font-bold tracking-[0.2em] mb-3">Localização</p>
-                    <p class="text-white/80 text-[11px] leading-relaxed mb-6 px-4 font-light">
+                    <p class="text-white/80 text-[11px] leading-relaxed mb-6 px-4 font-light italic">
                         Av. Prof. Nilton Lins, 1560A - Parque das Laranjeiras, Manaus - AM
                     </p>
                     <a href="https://www.google.com/maps/search/?api=1&query=Di+Fiori,+Av.+Prof.+Nilton+Lins,+1560A+-+Parque+das+Laranjeiras,+Manaus+-+AM,+69058-400" 
                        target="_blank" 
                        class="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/20 text-white font-bold text-[10px] tracking-widest uppercase hover:bg-white/10 transition-all">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                        Abrir no Google Maps
+                        Abrir no Maps
                     </a>
                 </footer>
             </div>
 
             <!-- Success State -->
-            <div id="success-state" class="hidden-view text-center py-10 animate-fade-in">
+            <div id="success-state" class="hidden-view text-center py-10">
                 <div class="flex justify-center mb-6">
                     <svg width="70" height="70" viewBox="0 0 24 24" fill="white">
                         <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                     </svg>
                 </div>
                 <h3 class="text-3xl font-bold text-white font-serif-title italic">Confirmado!</h3>
-                <p class="text-white/70 text-sm mt-4 font-light italic text-center">Mal podemos esperar por este dia. ❤️</p>
+                <p class="text-white/70 text-sm mt-4 font-light italic text-center">Obrigado! Mal podemos esperar. ❤️</p>
             </div>
         </section>
     </main>
 
-    <!-- Hidden Master Control -->
-    <button id="master-panel-btn" class="fixed bottom-6 right-6 p-4 bg-white/10 rounded-full text-white/10 z-50">
+    <!-- Master Admin Access -->
+    <button id="master-panel-btn" class="fixed bottom-6 right-6 p-4 bg-white/10 rounded-full text-white/5 z-50">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><circle cx="3" cy="6" r="1"></circle><circle cx="3" cy="12" r="1"></circle><circle cx="3" cy="18" r="1"></circle></svg>
     </button>
 
     <!-- Admin Panel -->
     <dialog id="admin-panel" class="fixed inset-0 z-[300] bg-white p-8 overflow-y-auto w-full h-full border-none m-0">
         <div class="flex justify-between items-center border-b pb-6 mb-8">
-            <h2 class="text-2xl font-bold text-[#B22222] font-serif-title tracking-widest uppercase text-center w-full">Dashboard</h2>
+            <h2 class="text-2xl font-bold text-[#B22222] font-serif-title tracking-widest uppercase text-center w-full">Presenças</h2>
             <button id="close-admin" class="text-4xl">&times;</button>
         </div>
-        <div id="guest-count" class="mb-8 p-10 bg-red-50 rounded-[2.5rem] text-7xl font-bold text-[#B22222] font-serif-title text-center shadow-inner">0</div>
+        <div id="guest-count" class="mb-8 p-10 bg-red-50 rounded-[2.5rem] text-7xl font-bold text-[#B22222] font-serif-title text-center">0</div>
         <div id="guest-list" class="space-y-4"></div>
     </dialog>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 
-        /** * InvitationApp - Centralized Application Logic
-         */
         const InvitationApp = {
             config: {
                 appId: 'cvt-debora-ramos',
@@ -247,7 +244,6 @@
 
             bindEvents() {
                 const el = (id) => document.getElementById(id);
-                
                 el('toggle-solo').onclick = () => this.updateType('Individual');
                 el('toggle-group').onclick = () => this.updateType('Grupo');
                 el('rsvp-form').onsubmit = (e) => this.handleRSVP(e);
@@ -266,21 +262,15 @@
             updateType(type) {
                 this.state.type = type;
                 const isSolo = type === 'Individual';
-                const s = document.getElementById('toggle-solo');
-                const g = document.getElementById('toggle-group');
-                const t = document.getElementById('guest-others');
-
-                s.className = isSolo ? 'flex-1 py-3.5 rounded-full border border-white/20 font-serif-title font-bold text-xs tracking-[0.1em] transition-all bg-white text-[#B22222] shadow-xl' : 'flex-1 py-3.5 rounded-full border border-white/20 font-serif-title font-bold text-xs tracking-[0.1em] transition-all text-white';
-                g.className = !isSolo ? 'flex-1 py-3.5 rounded-full border border-white/20 font-serif-title font-bold text-xs tracking-[0.1em] transition-all bg-white text-[#B22222] shadow-xl' : 'flex-1 py-3.5 rounded-full border border-white/20 font-serif-title font-bold text-xs tracking-[0.1em] transition-all text-white';
-                t.classList.toggle('hidden', isSolo);
+                document.getElementById('toggle-solo').className = isSolo ? 'flex-1 py-3.5 rounded-full border border-white/20 font-serif-title font-bold text-xs tracking-[0.1em] transition-all bg-white text-[#B22222] shadow-xl' : 'flex-1 py-3.5 rounded-full border border-white/20 font-serif-title font-bold text-xs tracking-[0.1em] transition-all text-white';
+                document.getElementById('toggle-group').className = !isSolo ? 'flex-1 py-3.5 rounded-full border border-white/20 font-serif-title font-bold text-xs tracking-[0.1em] transition-all bg-white text-[#B22222] shadow-xl' : 'flex-1 py-3.5 rounded-full border border-white/20 font-serif-title font-bold text-xs tracking-[0.1em] transition-all text-white';
+                document.getElementById('guest-others').classList.toggle('hidden', isSolo);
             },
 
             async handleRSVP(e) {
                 e.preventDefault();
                 const btn = document.getElementById('submit-btn');
-                const name = document.getElementById('guest-name').value.trim();
-                const others = document.getElementById('guest-others').value.trim();
-
+                const name = document.getElementById('guest-name').value;
                 btn.disabled = true;
                 btn.innerText = "A GUARDAR...";
 
@@ -289,10 +279,9 @@
                     await addDoc(colRef, {
                         nome: name,
                         tipo: this.state.type,
-                        acompanhantes: this.state.type === 'Grupo' ? others : "",
+                        acompanhantes: this.state.type === 'Grupo' ? document.getElementById('guest-others').value : "",
                         timestamp: serverTimestamp()
                     });
-
                     document.getElementById('rsvp-interface').classList.add('hidden-view');
                     document.getElementById('success-state').classList.remove('hidden-view');
                     this.celebrate();
@@ -310,7 +299,6 @@
                     h.style.animationDelay = Math.random() * 3 + 's';
                     h.innerHTML = `<svg width="${15 + Math.random()*25}" height="40" viewBox="0 0 24 24" fill="white"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
                     document.body.appendChild(h);
-                    setTimeout(() => h.remove(), 6000);
                 }
             },
 
