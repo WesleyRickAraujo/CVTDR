@@ -96,14 +96,14 @@
                 </h2>
             </header>
 
-            <!-- CAMADA 3: ANIVERSARIANTE (Escala aumentada para melhor preenchimento) -->
+            <!-- CAMADA 3: ANIVERSARIANTE (Escala aumentada e integrada) -->
             <figure class="absolute inset-0 flex items-center justify-center z-person pointer-events-none">
                 <div class="relative mt-36">
                     <img src="deborah.png" class="w-44 md:w-56" alt="Deborah">
                 </div>
             </figure>
 
-            <!-- CAMADA 5: BOLO (Subido e aumentado para sobrepor a foto e tirar o espaço grosseiro) -->
+            <!-- CAMADA 5: BOLO (Integrado com a foto, escala 5/7 ajustada) -->
             <img src="bolo.png" class="absolute bottom-[0.5rem] left-1/2 -translate-x-1/2 w-48 md:w-60 drop-shadow-2xl z-front" alt="Bolo">
         </div>
 
@@ -113,7 +113,7 @@
             <div class="text-center mb-8 pb-6 border-b border-white/20">
                 <p class="font-serif-title text-3xl italic tracking-wide">Di Fiori</p>
                 <div class="flex justify-center items-center gap-4 mt-3">
-                    <span class="text-white/90 text-xs font-bold tracking-widest uppercase">Dia 21</span>
+                    <span class="text-white/90 text-xs font-bold tracking-widest uppercase">Dia 20</span>
                     <span class="w-1.5 h-1.5 bg-white/40 rounded-full"></span>
                     <span class="text-white/90 text-xs font-bold tracking-widest uppercase">18:30h</span>
                 </div>
@@ -186,14 +186,23 @@
             <h2 class="text-2xl font-bold text-[#B22222] font-serif-title tracking-widest uppercase text-center w-full">Presenças</h2>
             <button id="close-admin" class="text-4xl">&times;</button>
         </div>
-        <div id="guest-count" class="mb-8 p-10 bg-red-50 rounded-[2.5rem] text-7xl font-bold text-[#B22222] font-serif-title text-center shadow-inner">0</div>
+        
+        <div class="flex flex-col items-center mb-8">
+            <div id="guest-count" class="w-full p-10 bg-red-50 rounded-[2.5rem] text-7xl font-bold text-[#B22222] font-serif-title text-center shadow-inner">0</div>
+            
+            <!-- Botão de Resetar Lista -->
+            <button id="reset-list-btn" class="mt-4 text-[10px] text-red-300 uppercase tracking-widest hover:text-[#B22222] transition-colors font-bold">
+                Resetar Lista de Confirmados
+            </button>
+        </div>
+
         <div id="guest-list" class="space-y-4"></div>
     </dialog>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, serverTimestamp, onSnapshot } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 
         const InvitationApp = {
             config: {
@@ -226,6 +235,7 @@
                 el('rsvp-form').onsubmit = (e) => this.handleRSVP(e);
                 el('master-panel-btn').onclick = () => this.openAdmin();
                 el('close-admin').onclick = () => el('admin-panel').close();
+                el('reset-list-btn').onclick = () => this.resetList();
             },
 
             startIntro() {
@@ -274,7 +284,7 @@
                     h.className = 'anim-heart-rise';
                     h.style.left = Math.random() * 100 + '%';
                     h.style.animationDelay = Math.random() * 3 + 's';
-                    // Alterado fill para Vermelho Deborah
+                    // Corrigido: Corações agora são Vermelho Deborah
                     h.innerHTML = `<svg width="${15 + Math.random()*25}" height="40" viewBox="0 0 24 24" fill="#B22222"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
                     document.body.appendChild(h);
                 }
@@ -301,6 +311,33 @@
                         countEl.innerText = total;
                     });
                 }
+            },
+
+            /**
+             * Função para resetar a lista de presenças
+             * Percorre todos os documentos da coleção e os deleta.
+             */
+            async resetList() {
+                const check = confirm("ATENÇÃO: Tens a certeza que queres APAGAR TODA a lista de confirmações? Esta ação não pode ser desfeita.");
+                if (!check) return;
+
+                const secondCheck = confirm("Confirmação final: Desejas realmente resetar a lista para zero?");
+                if (!secondCheck) return;
+
+                try {
+                    const colRef = collection(this.state.db, 'artifacts', this.config.appId, 'public', 'data', 'presencas');
+                    const snapshot = await getDocs(colRef);
+                    
+                    const deletePromises = snapshot.docs.map(docSnap => 
+                        deleteDoc(doc(this.state.db, 'artifacts', this.config.appId, 'public', 'data', 'presencas', docSnap.id))
+                    );
+
+                    await Promise.all(deletePromises);
+                    alert("A lista foi resetada com sucesso!");
+                } catch (err) {
+                    console.error("Erro ao resetar lista:", err);
+                    alert("Ocorreu um erro ao tentar resetar a lista.");
+                }
             }
         };
 
@@ -308,4 +345,3 @@
     </script>
 </body>
 </html>
-
