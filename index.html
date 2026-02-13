@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deborah Ramos - 26 Anos</title>
+    <title>Deborah's Birthday - 26 Anos</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Cormorant Garamond & Montserrat -->
@@ -15,10 +15,10 @@
 
         /* ANIMAÇÕES SCRAPBOOK */
         @keyframes reveal { from { opacity:0; letter-spacing: 0.15em; transform: translateY(20px); } to { opacity:1; letter-spacing: 0.05em; transform: translateY(0); } }
-        @keyframes jump-left { 0%, 100% { transform: translate(-50%, 0) rotate(-6deg); } 50% { transform: translate(-50%, -25px) rotate(-8deg); } }
-        @keyframes jump-right { 0%, 100% { transform: translate(-50%, 0) rotate(6deg); } 50% { transform: translate(-50%, -30px) rotate(9deg); } }
-        @keyframes float-cake { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, -12px) scale(1.05); } }
-        @keyframes float-cup { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(12deg) translateY(-8px); } }
+        @keyframes jump-left { 0%, 100% { transform: rotate(-8deg) translateY(0); } 50% { transform: rotate(-10deg) translateY(-20px); } }
+        @keyframes jump-right { 0%, 100% { transform: rotate(8deg) translateY(0); } 50% { transform: rotate(10deg) translateY(-25px); } }
+        @keyframes float-cake { 0%, 100% { transform: scale(1) translateY(0); } 50% { transform: scale(1.03) translateY(-5px); } }
+        @keyframes float-cup { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(10deg) translateY(-5px); } }
         @keyframes float-up { 
             0% { transform: translateY(0) rotate(0deg); opacity: 1; } 
             100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; } 
@@ -33,31 +33,30 @@
         .animate-jump-right { animation: jump-right 5s infinite ease-in-out; }
         .animate-float-cake { animation: float-cake 3.5s infinite ease-in-out; }
         .animate-float-cup { animation: float-cup 4s infinite ease-in-out; }
-        .animate-float-up { animation: float-up 5s ease-in forwards; position: fixed; bottom: -50px; z-index: 60; pointer-events: none; }
+        .animate-float-up { animation: float-up 5s ease-in forwards; position: fixed; bottom: -50px; z-index: 100; pointer-events: none; }
         .animate-bounce-in { animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
         .animate-scroll { animation: scrollHint 2s infinite; }
 
         .hidden-view { display: none !important; }
         
-        /* Camadas de Profundidade */
-        .layer-bg { z-index: 0; }
-        .layer-back-numbers { z-index: 10; }
-        .layer-person { z-index: 20; }
-        .layer-front-cake { z-index: 30; }
-        .layer-details { z-index: 40; }
+        /* Hierarquia de Camadas */
+        .layer-bg { z-index: 1; }
+        .layer-text-top { z-index: 10; }
+        .layer-numbers { z-index: 5; }
+        .layer-person { z-index: 15; }
+        .layer-front { z-index: 25; }
         .layer-ui { z-index: 50; }
 
-        /* Máscara suave na base da composição */
         .photo-mask {
-            mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
-            -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+            mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
         }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center p-4 pt-6">
 
-    <!-- 1. ECRÃ DE ENTRADA (Cormorant Garamond, Caixa Mista) -->
-    <div id="intro-screen" class="fixed inset-0 z-[100] bg-[#FDF5E6] flex flex-col items-center justify-center animate-fade-out">
+    <!-- 1. ECRÃ DE ENTRADA -->
+    <div id="intro-screen" class="fixed inset-0 z-[200] bg-[#FDF5E6] flex flex-col items-center justify-center animate-fade-out">
         <h1 class="text-5xl md:text-7xl text-[#B22222] font-serif-title font-medium italic animate-reveal text-center px-4">
             Deborah Ramos
         </h1>
@@ -67,35 +66,42 @@
         </p>
     </div>
 
-    <!-- 2. COMPOSIÇÃO VISUAL (HIERARQUIA SCRAPBOOK) -->
+    <!-- 2. COMPOSIÇÃO VISUAL (SCRAPBOOK FIEL) -->
     <div id="main-content" class="relative w-full max-w-sm transition-all duration-1000 opacity-0 translate-y-6 scale-95 mb-16">
         
-        <div class="relative shadow-2xl rounded-[2.5rem] overflow-hidden border-[10px] border-white bg-white aspect-[3/4.5]">
+        <div class="relative shadow-2xl rounded-[2.5rem] overflow-hidden border-[12px] border-white bg-white aspect-[3/5]">
             
             <!-- MOLDURA DE FUNDO -->
-            <img src="moldura.jpg" class="absolute inset-0 w-full h-full object-cover layer-bg" alt="Fundo" onerror="this.style.display='none'">
+            <img src="moldura.jpg" class="absolute inset-0 w-full h-full object-cover layer-bg" alt="Fundo">
             
-            <!-- TAÇA (Posicionada no topo) -->
-            <img src="taca.png" class="absolute top-8 right-6 w-16 md:w-20 layer-details drop-shadow-lg animate-float-cup" alt="Taça" onerror="this.style.display='none'">
-
-            <!-- NÚMEROS GIGANTES (Fundo da composição) -->
-            <div class="absolute inset-0 layer-back-numbers pointer-events-none">
-                <!-- Número 2 -->
-                <img src="numero 2 do 26.jpeg" class="absolute top-[8%] left-[25%] -translate-x-1/2 w-52 md:w-64 animate-jump-left opacity-90" alt="2" onerror="this.style.display='none'">
-                <!-- Número 6 -->
-                <img src="numero 6 do 26.jpeg.jpeg" class="absolute top-[5%] left-[75%] -translate-x-1/2 w-52 md:w-64 animate-jump-right opacity-90" alt="6" onerror="this.style.display='none'">
+            <!-- TEXTOS DO TOPO (Inspirados na referência) -->
+            <div class="absolute top-[8%] inset-x-0 text-center layer-text-top px-6 pointer-events-none">
+                <h2 class="text-[#B22222] font-serif-title text-4xl md:text-5xl italic leading-tight">
+                    Deborah's Birthday
+                </h2>
+                <p class="text-[#B22222]/70 font-serif-title text-xl md:text-2xl mt-2">
+                    Difiori às 18:30h
+                </p>
             </div>
 
-            <!-- ANIVERSARIANTE (Centralizada, agora com chapéu embutido) -->
+            <!-- NÚMEROS GIGANTES (Atrás da Aniversariante) -->
+            <img src="numero 2 do 26.jpeg" class="absolute top-[20%] left-[10%] w-60 md:w-72 animate-jump-left opacity-80 layer-numbers" alt="2">
+            <img src="numero 6 do 26.jpeg.jpeg" class="absolute top-[18%] right-[10%] w-60 md:w-72 animate-jump-right opacity-80 layer-numbers" alt="6">
+
+            <!-- ANIVERSARIANTE (Com chapéu embutido) -->
             <div class="absolute inset-0 flex items-center justify-center layer-person pointer-events-none">
-                <div class="relative mt-20 photo-mask">
-                    <img src="deborah.png" class="w-48 md:w-56 drop-shadow-[0_25px_30px_rgba(0,0,0,0.4)]" alt="Deborah" onerror="this.parentElement.innerHTML='<div class=\'w-32 h-44 bg-gray-100 flex items-center justify-center text-[10px] text-gray-400\'>Foto</div>'">
+                <div class="relative mt-32 photo-mask">
+                    <img src="deborah.png" class="w-44 md:w-52 drop-shadow-[0_20px_30px_rgba(0,0,0,0.3)]" alt="Deborah">
                 </div>
             </div>
 
-            <!-- BOLO (Frente da composição, flutuando na base) -->
-            <div class="absolute bottom-[-10px] left-1/2 -translate-x-1/2 w-full flex justify-center pb-4 layer-front-cake pointer-events-none">
-                <img src="bolo.png" class="w-56 md:w-64 drop-shadow-[0_-5px_20px_rgba(0,0,0,0.15)] animate-float-cake" alt="Bolo" onerror="this.style.display='none'">
+            <!-- BOLO CENTRALIZADO E TAÇA (Frente da composição) -->
+            <div class="absolute bottom-4 inset-x-0 flex flex-col items-center layer-front pointer-events-none">
+                <div class="relative">
+                    <img src="bolo.png" class="w-56 md:w-64 drop-shadow-xl animate-float-cake" alt="Bolo">
+                    <!-- Taça posicionada ao lado do bolo -->
+                    <img src="taca.png" class="absolute -top-10 -right-6 w-16 md:w-20 animate-float-cup drop-shadow-md" alt="Taça">
+                </div>
             </div>
         </div>
 
@@ -109,20 +115,18 @@
         <div class="w-full mt-8 bg-white/95 backdrop-blur-md p-10 rounded-[3rem] shadow-2xl border border-red-50 relative layer-ui">
             <div id="rsvp-view">
                 <div class="text-center mb-10">
-                    <h2 class="text-[#B22222] font-bold text-3xl uppercase tracking-[0.1em] font-serif-title">Confirmação</h2>
+                    <h2 class="text-[#B22222] font-bold text-3xl uppercase tracking-[0.1em] font-serif-title italic">Confirmação</h2>
                     <div class="h-[1px] bg-red-100 w-12 mx-auto mt-4"></div>
                 </div>
 
                 <form id="rsvp-form" class="space-y-6">
-                    <div class="relative">
-                        <input 
-                            type="text" id="input-nome" placeholder="Digite seu nome" required
-                            class="w-full p-4 bg-transparent border-b border-red-200 focus:border-[#B22222] outline-none text-center text-lg font-light transition-all placeholder:text-gray-200"
-                        >
-                    </div>
+                    <input 
+                        type="text" id="input-nome" placeholder="Digite seu nome" required
+                        class="w-full p-4 bg-transparent border-b border-red-200 focus:border-[#B22222] outline-none text-center text-lg font-light transition-all"
+                    >
 
                     <div class="flex gap-4">
-                        <button type="button" id="btn-solo" onclick="setTipo('Individual')" class="flex-1 py-3 rounded-full border border-[#B22222] bg-[#B22222] text-white font-serif-title font-bold text-xs tracking-[0.1em] transition-all shadow-md">
+                        <button type="button" id="btn-solo" onclick="setTipo('Individual')" class="flex-1 py-3 rounded-full border border-[#B22222] bg-[#B22222] text-white font-serif-title font-bold text-xs tracking-[0.1em] shadow-md">
                             INDIVIDUAL
                         </button>
                         <button type="button" id="btn-group" onclick="setTipo('Grupo')" class="flex-1 py-3 rounded-full border border-red-100 text-[#B22222] font-serif-title font-bold text-xs tracking-[0.1em] transition-all">
@@ -147,24 +151,24 @@
                         <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                     </svg>
                 </div>
-                <h3 class="text-3xl font-bold text-[#B22222] font-serif-title uppercase tracking-[0.1em]">Confirmado!</h3>
-                <p class="text-gray-500 text-sm mt-4 font-light italic">Obrigado! Nos vemos lá. ❤️</p>
+                <h3 class="text-3xl font-bold text-[#B22222] font-serif-title italic">Confirmado!</h3>
+                <p class="text-gray-500 text-sm mt-4 font-light">Obrigado! Nos vemos lá. ❤️</p>
             </div>
         </div>
     </div>
 
     <!-- BOTÃO ADMIN -->
-    <button onclick="acessoAdmin()" class="fixed bottom-6 right-6 p-4 bg-white/20 hover:bg-white/60 rounded-full text-[#B22222]/20 z-50 transition-all">
+    <button onclick="acessoAdmin()" class="fixed bottom-6 right-6 p-4 bg-white/40 rounded-full shadow-sm text-[#B22222]/20 z-50">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><circle cx="3" cy="6" r="1"></circle><circle cx="3" cy="12" r="1"></circle><circle cx="3" cy="18" r="1"></circle></svg>
     </button>
 
     <!-- MODAL LISTA -->
     <div id="admin-modal" class="hidden-view fixed inset-0 z-[200] bg-white p-8 overflow-y-auto font-serif">
         <div class="flex justify-between items-center border-b pb-6 mb-8">
-            <h2 class="text-2xl font-bold text-[#B22222] font-serif-title tracking-widest uppercase">Convidados</h2>
-            <button onclick="document.getElementById('admin-modal').classList.add('hidden-view')" class="text-4xl leading-none">&times;</button>
+            <h2 class="text-2xl font-bold text-[#B22222] font-serif-title tracking-widest uppercase">Lista</h2>
+            <button onclick="document.getElementById('admin-modal').classList.add('hidden-view')" class="text-4xl">&times;</button>
         </div>
-        <div id="admin-stats" class="mb-8 p-10 bg-red-50 rounded-[2.5rem] text-7xl font-bold text-[#B22222] font-serif-title text-center shadow-inner">
+        <div id="admin-stats" class="mb-8 p-10 bg-red-50 rounded-[2.5rem] text-7xl font-bold text-[#B22222] font-serif-title text-center">
             0
         </div>
         <div id="list-container" class="space-y-4"></div>
@@ -190,7 +194,6 @@
         const appId = "cvt-debora-ramos";
         let currentType = 'Individual';
 
-        // Animação de entrada
         setTimeout(() => {
             const main = document.getElementById('main-content');
             main.classList.remove('opacity-0', 'translate-y-6', 'scale-95');
@@ -199,19 +202,9 @@
 
         window.setTipo = (t) => {
             currentType = t;
-            const btnS = document.getElementById('btn-solo');
-            const btnG = document.getElementById('btn-grupo');
-            const area = document.getElementById('input-acompanhantes');
-            
-            if(t === 'Individual') {
-                btnS.className = "flex-1 py-3 rounded-full border border-[#B22222] bg-[#B22222] text-white font-serif-title font-bold text-xs tracking-[0.1em] shadow-md";
-                btnG.className = "flex-1 py-3 rounded-full border border-red-100 text-[#B22222] font-serif-title font-bold text-xs tracking-[0.1em]";
-                area.classList.add('hidden');
-            } else {
-                btnG.className = "flex-1 py-3 rounded-full border border-[#B22222] bg-[#B22222] text-white font-serif-title font-bold text-xs tracking-[0.1em] shadow-md";
-                btnS.className = "flex-1 py-3 rounded-full border border-red-100 text-[#B22222] font-serif-title font-bold text-xs tracking-[0.1em]";
-                area.classList.remove('hidden');
-            }
+            document.getElementById('btn-solo').className = t === 'Individual' ? 'flex-1 py-3 rounded-full border border-[#B22222] bg-[#B22222] text-white font-serif-title font-bold text-xs tracking-[0.1em] shadow-md' : 'flex-1 py-3 rounded-full border border-red-100 text-[#B22222] font-serif-title font-bold text-xs tracking-[0.1em]';
+            document.getElementById('btn-group').className = t === 'Grupo' ? 'flex-1 py-3 rounded-full border border-[#B22222] bg-[#B22222] text-white font-serif-title font-bold text-xs tracking-[0.1em] shadow-md' : 'flex-1 py-3 rounded-full border border-red-100 text-[#B22222] font-serif-title font-bold text-xs tracking-[0.1em]';
+            document.getElementById('input-acompanhantes').classList.toggle('hidden', t === 'Individual');
         };
 
         document.getElementById('rsvp-form').onsubmit = async (e) => {
@@ -268,7 +261,7 @@
                         }
                         totalPessoas += count;
                         const item = document.createElement('div');
-                        item.className = "p-6 bg-gray-50 rounded-[2rem] border border-gray-100 shadow-sm";
+                        item.className = "p-6 bg-gray-50 rounded-[2rem] border border-gray-100";
                         item.innerHTML = `
                             <p class="text-[10px] font-bold text-[#B22222] uppercase tracking-[0.2em] mb-1">${d.tipo}</p>
                             <p class="font-bold text-gray-800 text-lg font-serif-title">${d.nome}</p>
