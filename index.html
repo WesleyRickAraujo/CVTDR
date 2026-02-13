@@ -10,7 +10,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
-        body { font-family: 'Montserrat', sans-serif; background-color: #FDF5E6; overflow-x: hidden; margin: 0; }
+        /* Textura de fundo subtil */
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            background-color: #FDF5E6; 
+            background-image: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
+            overflow-x: hidden; 
+            margin: 0; 
+        }
         .font-serif-title { font-family: 'Cormorant Garamond', serif; }
 
         /* ANIMAÇÕES SCRAPBOOK */
@@ -30,12 +37,12 @@
 
         .hidden-view { display: none !important; }
         
-        /* HIERARQUIA DE CAMADAS */
-        .layer-base-moldura { z-index: 10; }
-        .layer-numbers { z-index: 12; }
-        .layer-title { z-index: 15; }
-        .layer-person { z-index: 20; }
-        .layer-front-cake { z-index: 30; }
+        /* HIERARQUIA DE CAMADAS (Z-INDEX) */
+        .layer-numbers { z-index: 5; }      
+        .layer-base-moldura { z-index: 10; } 
+        .layer-title { z-index: 15; }        
+        .layer-person { z-index: 20; }       
+        .layer-front-cake { z-index: 30; }    
         .layer-ui { z-index: 50; }
 
         .photo-mask {
@@ -52,7 +59,7 @@
             Deborah Ramos
         </h1>
         <div class="h-[1px] bg-[#B22222]/20 mt-6 w-16 md:w-24"></div>
-        <p class="mt-4 tracking-[0.2em] text-[#B22222]/50 text-xs font-light italic">
+        <p class="mt-4 tracking-[0.2em] text-[#B22222]/50 text-xs font-light italic text-center">
             celebra seu aniversário
         </p>
     </div>
@@ -60,38 +67,36 @@
     <!-- 2. COMPOSIÇÃO VISUAL (SCRAPBOOK) -->
     <div id="main-content" class="relative w-full max-w-sm transition-all duration-1000 opacity-0 translate-y-6 scale-95 mt-4 mb-10">
         
-        <div class="relative shadow-2xl rounded-[2.5rem] overflow-hidden border-[12px] border-white bg-white aspect-[3/5]">
+        <div class="relative shadow-2xl rounded-[2.5rem] overflow-hidden border-[10px] border-white bg-white aspect-[3/5] scrapbook-container">
             
-            <!-- MOLDURA (Layer 10) -->
-            <img src="moldura.jpg" class="absolute inset-0 w-full h-full object-cover layer-base-moldura" alt="Fundo">
-            
-            <!-- NÚMEROS (Layer 12) -->
-            <img src="num2.png" class="absolute top-[35%] left-[2%] w-44 md:w-52 animate-jump-2 opacity-90 layer-numbers" alt="2">
-            <img src="num6.png" class="absolute top-[33%] right-[2%] w-44 md:w-52 animate-jump-6 opacity-90 layer-numbers" alt="6">
+            <!-- 1. NÚMEROS (Layer 5) - Atrás da moldura PNG -->
+            <img src="num2.png" class="absolute top-[38%] left-[2%] w-44 md:w-52 animate-jump-2 opacity-95 layer-numbers" alt="2">
+            <img src="num6.png" class="absolute top-[36%] right-[2%] w-44 md:w-52 animate-jump-6 opacity-95 layer-numbers" alt="6">
 
-            <!-- TÍTULO (Layer 15) -->
-            <div class="absolute top-[14%] inset-x-0 text-center layer-title px-4 pointer-events-none">
+            <!-- 2. MOLDURA PNG (Layer 10) - Agora com ajuste de preenchimento para garantir visibilidade -->
+            <img src="moldura.png" class="absolute inset-0 w-full h-full object-fill layer-base-moldura" alt="Moldura">
+            
+            <!-- 3. TÍTULO (Layer 15) - Posicionado para não competir com a moldura -->
+            <div class="absolute top-[18%] inset-x-0 text-center layer-title px-4 pointer-events-none">
                 <h2 class="text-[#B22222] font-serif-title text-4xl md:text-5xl italic leading-tight drop-shadow-sm">
                     Deborah's Birthday
                 </h2>
             </div>
 
-            <!-- ANIVERSARIANTE (Layer 20) -->
+            <!-- 4. ANIVERSARIANTE (Layer 20) -->
             <div class="absolute inset-0 flex items-center justify-center layer-person pointer-events-none">
-                <div class="relative mt-40 photo-mask">
+                <div class="relative mt-44 photo-mask">
                     <img src="deborah.png" class="w-32 md:w-40 drop-shadow-[0_20px_40px_rgba(0,0,0,0.4)]" alt="Deborah">
                 </div>
             </div>
 
-            <!-- BOLO (Layer 30) - ESTÁTICO E MENOR (3/4 do tamanho anterior) -->
-            <!-- Usei w-48 (3/4 de 64) e md:w-54 (3/4 de 72). Removi a animação float. -->
-            <img src="bolo.png" class="absolute bottom-[-1.5rem] left-1/2 -translate-x-1/2 w-48 md:w-54 drop-shadow-2xl layer-front-cake" alt="Bolo">
+            <!-- 5. BOLO (Layer 30) - ESTÁTICO E MAIOR (9/10) -->
+            <img src="bolo.png" class="absolute bottom-[-1.5rem] left-1/2 -translate-x-1/2 w-64 md:w-72 drop-shadow-2xl layer-front-cake" alt="Bolo">
         </div>
 
         <!-- 3. CARD DE INFORMAÇÕES E RSVP -->
         <div class="w-full mt-8 bg-white/95 backdrop-blur-md p-10 rounded-[3rem] shadow-2xl border border-red-50 relative layer-ui">
             
-            <!-- Cabeçalho Informativo -->
             <div class="text-center mb-10 pb-6 border-b border-red-50">
                 <p class="text-[#B22222] font-serif-title text-3xl italic tracking-wide">Di Fiori</p>
                 <div class="flex justify-center items-center gap-4 mt-2">
@@ -131,9 +136,8 @@
                     </button>
                 </form>
 
-                <!-- Botão de Endereço e Google Maps -->
                 <div class="mt-10 pt-8 border-t border-red-50 text-center">
-                    <p class="text-[10px] text-[#B22222]/40 uppercase font-bold tracking-[0.2em] mb-3">Localização do Evento</p>
+                    <p class="text-[10px] text-[#B22222]/40 uppercase font-bold tracking-widest mb-3">Localização</p>
                     <p class="text-gray-500 text-[11px] leading-relaxed mb-6 px-4">
                         Av. Prof. Nilton Lins, 1560A - Parque das Laranjeiras, Manaus - AM
                     </p>
@@ -154,7 +158,7 @@
                     </svg>
                 </div>
                 <h3 class="text-3xl font-bold text-[#B22222] font-serif-title italic">Confirmado!</h3>
-                <p class="text-gray-500 text-sm mt-4 font-light italic">Mal podemos esperar. ❤️</p>
+                <p class="text-gray-500 text-sm mt-4 font-light italic text-center">Mal podemos esperar. ❤️</p>
             </div>
         </div>
     </div>
@@ -167,7 +171,7 @@
     <!-- MODAL LISTA -->
     <div id="admin-modal" class="hidden-view fixed inset-0 z-[300] bg-white p-8 overflow-y-auto font-serif">
         <div class="flex justify-between items-center border-b pb-6 mb-8">
-            <h2 class="text-2xl font-bold text-[#B22222] font-serif-title tracking-widest uppercase">Lista de Convidados</h2>
+            <h2 class="text-2xl font-bold text-[#B22222] font-serif-title tracking-widest uppercase text-center w-full">Lista de Convidados</h2>
             <button onclick="document.getElementById('admin-modal').classList.add('hidden-view')" class="text-4xl leading-none">&times;</button>
         </div>
         <div id="admin-stats" class="mb-8 p-10 bg-red-50 rounded-[2.5rem] text-7xl font-bold text-[#B22222] font-serif-title text-center shadow-inner">
@@ -275,9 +279,9 @@
                         const item = document.createElement('div');
                         item.className = "p-6 bg-gray-50 rounded-[2rem] border border-gray-100 shadow-sm";
                         item.innerHTML = `
-                            <p class="text-[10px] font-bold text-[#B22222] uppercase tracking-[0.2em] mb-1">${d.tipo}</p>
-                            <p class="font-bold text-gray-800 text-lg font-serif-title">${d.nome}</p>
-                            ${d.acompanhantes ? `<p class="text-xs text-gray-500 mt-3 italic border-t pt-3 border-gray-200">+ ${d.acompanhantes}</p>` : ''}
+                            <p class="text-[10px] font-bold text-[#B22222] uppercase tracking-[0.2em] mb-1 text-center">${d.tipo}</p>
+                            <p class="font-bold text-gray-800 text-lg font-serif-title text-center">${d.nome}</p>
+                            ${d.acompanhantes ? `<p class="text-xs text-gray-500 mt-3 italic border-t pt-3 border-gray-200 text-center">+ ${d.acompanhantes}</p>` : ''}
                         `;
                         container.appendChild(item);
                     });
