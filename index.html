@@ -29,7 +29,15 @@ export default function App() {
   const [hearts, setHearts] = useState([]);
 
   useEffect(() => {
-    signInAnonymously(auth);
+    const initAuth = async () => {
+      try {
+        await signInAnonymously(auth);
+      } catch (err) {
+        console.error("Auth failed", err);
+      }
+    };
+    initAuth();
+    
     const timer = setTimeout(() => setStatus('convite'), 3500);
     return () => clearTimeout(timer);
   }, []);
@@ -38,7 +46,8 @@ export default function App() {
     e.preventDefault();
     if (!nome.trim()) return;
     try {
-      await addDoc(collection(db, "artifacts", appId, "public", "data", "presencas"), {
+      const colRef = collection(db, "artifacts", appId, "public", "data", "presencas");
+      await addDoc(colRef, {
         nome,
         tipo,
         acompanhantes: tipo === 'Grupo' ? acompanhantes : "",
@@ -73,83 +82,90 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FDF5E6] flex flex-col items-center p-4 overflow-x-hidden font-sans selection:bg-red-100">
+    <div className="min-h-screen bg-[#FDF5E6] flex flex-col items-center p-4 overflow-x-hidden font-sans">
       
       {/* 1. ECRÃ DE ENTRADA */}
       {status === 'entrada' && (
-        <div className="fixed inset-0 z-[100] bg-[#FDF5E6] flex flex-col items-center justify-center animate-fade-out pointer-events-none">
-            <h1 className="text-4xl md:text-6xl text-[#B22222] font-serif tracking-[0.3em] animate-reveal italic">
+        <div className="fixed inset-0 z-[200] bg-[#FDF5E6] flex flex-col items-center justify-center animate-[fadeOut_1s_3s_forwards] pointer-events-none">
+            <h1 className="text-4xl md:text-6xl text-[#B22222] font-serif tracking-[0.3em] animate-[reveal_2.5s_ease-out_forwards] italic">
                 Deborah Ramos
             </h1>
-            <div className="w-16 h-[1px] bg-[#B22222]/30 mt-8 animate-expand"></div>
+            <div className="w-16 h-[1px] bg-[#B22222]/30 mt-8 animate-[expand_1.5s_0.8s_ease-in-out_forwards]"></div>
             <p className="mt-6 tracking-[0.4em] text-[#B22222]/40 text-[10px] uppercase font-light">
                 celebra seu aniversário
             </p>
         </div>
       )}
 
-      {/* 2. COMPOSIÇÃO VISUAL (ESTILO SCRAPBOOK) */}
+      {/* 2. COMPOSIÇÃO VISUAL (SCRAPBOOK) */}
       <div className={`relative w-full max-w-sm transition-all duration-1000 mt-4 ${status === 'entrada' ? 'opacity-0 scale-95 translate-y-10' : 'opacity-100 scale-100 translate-y-0'}`}>
         
-        {/* Card Container - Branco Puro Sem Textura */}
-        <div className="relative shadow-2xl rounded-[2.5rem] overflow-hidden border-[10px] border-white bg-white aspect-[3/5]">
+        {/* Card Container Principal */}
+        <div className="relative shadow-2xl rounded-[2.5rem] overflow-hidden border-[10px] border-white bg-white aspect-[3/5] isolation-auto">
             
-            {/* CAMADA 0: MOLDURA (Z-0) */}
+            {/* CAMADA 0: MOLDURA (Fundo Absoluto) */}
             <img 
                 src="moldura.jpg" 
-                className="absolute inset-0 w-full h-full object-fill z-0 pointer-events-none" 
+                className="absolute inset-0 w-full h-full object-fill pointer-events-none" 
+                style={{ zIndex: 0 }}
                 alt="Moldura" 
             />
             
-            {/* CAMADA 10: NÚMEROS (Aparecem sobre a moldura) */}
-            <img src="num2.png" className="absolute top-[35%] left-[5%] w-36 md:w-40 animate-jump-slow z-10 opacity-95" alt="2" />
-            <img src="num6.png" className="absolute top-[33%] right-[5%] w-36 md:w-40 animate-jump-fast z-10 opacity-95" alt="6" />
+            {/* CAMADA 10: NÚMEROS */}
+            <img src="num2.png" className="absolute top-[35%] left-[5%] w-36 md:w-40 animate-[jump-slow_6s_infinite_ease-in-out] opacity-95" style={{ zIndex: 10 }} alt="2" />
+            <img src="num6.png" className="absolute top-[33%] right-[5%] w-36 md:w-40 animate-[jump-fast_5s_infinite_ease-in-out] opacity-95" style={{ zIndex: 10 }} alt="6" />
 
-            {/* CAMADA 20: ANIVERSARIANTE (ORIGINAL - SEM SOMBRA OU MÁSCARA) */}
-            <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
+            {/* CAMADA 20: ANIVERSARIANTE (FOTO ORIGINAL) */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ zIndex: 20 }}>
                 <div className="relative mt-44">
                     <img 
                         src="deborah.png" 
                         className="w-40 md:w-48 block" 
                         alt="Deborah" 
-                        style={{ filter: 'none', maskImage: 'none', WebkitMaskImage: 'none' }} 
+                        style={{ 
+                          filter: 'none', 
+                          boxShadow: 'none', 
+                          WebkitFilter: 'none',
+                          maskImage: 'none',
+                          WebkitMaskImage: 'none'
+                        }} 
                     />
                 </div>
             </div>
 
-            {/* CAMADA 30: TÍTULO (Garantido à frente da moldura) */}
-            <div className="absolute top-[18%] inset-x-0 text-center z-30 pointer-events-none px-6">
-                <h2 className="text-[#B22222] font-serif text-4xl md:text-5xl italic drop-shadow-sm leading-tight">
+            {/* CAMADA 30: TÍTULO (POR CIMA DA MOLDURA) */}
+            <div className="absolute top-[18%] inset-x-0 text-center pointer-events-none px-6" style={{ zIndex: 30 }}>
+                <h2 className="text-[#B22222] font-serif text-4xl md:text-5xl italic leading-tight" style={{ textShadow: '0 2px 4px rgba(255,255,255,0.8)' }}>
                     Deborah's Birthday
                 </h2>
             </div>
 
-            {/* CAMADA 40: BOLO (Frente de Tudo - Estático - 5/7 do anterior) */}
-            <img src="bolo.png" className="absolute bottom-[-1rem] left-1/2 -translate-x-1/2 w-36 md:w-44 z-40" alt="Bolo" />
+            {/* CAMADA 40: BOLO (FRENTE - ESCALA 5/7) */}
+            <img src="bolo.png" className="absolute bottom-[-1rem] left-1/2 -translate-x-1/2 w-32 md:w-40" style={{ zIndex: 40 }} alt="Bolo" />
         </div>
       </div>
 
-      {/* 3. FORMULÁRIO RSVP VIBRANTE (VERMELHO COM BRANCO) */}
+      {/* 3. RSVP - CORES INVERTIDAS (VERMELHO COM BRANCO) */}
       <div className={`w-full max-w-sm mt-8 transition-all duration-700 delay-500 ${status === 'entrada' ? 'opacity-0 translate-y-10' : 'opacity-100 translate-y-0'}`}>
         <div className="bg-[#B22222] p-8 md:p-10 rounded-[3rem] shadow-2xl border border-white/10 text-white">
             {status === 'convite' ? (
                 <form onSubmit={handleRSVP} className="space-y-6">
                     <div className="text-center pb-6 border-b border-white/20">
-                        <p className="font-serif text-3xl italic tracking-wide">Di Fiori</p>
+                        <p className="font-serif text-3xl italic tracking-wide text-white">Di Fiori</p>
                         <div className="flex justify-center items-center gap-4 mt-3">
-                            <span className="text-white/80 text-xs font-bold tracking-widest uppercase">Dia 20</span>
-                            <span className="w-1.5 h-1.5 bg-white/30 rounded-full"></span>
-                            <span className="text-white/80 text-xs font-bold tracking-widest uppercase">18:30H</span>
+                            <span className="text-white font-bold tracking-widest uppercase text-[10px]">Dia 20</span>
+                            <span className="w-1.5 h-1.5 bg-white/40 rounded-full"></span>
+                            <span className="text-white font-bold tracking-widest uppercase text-[10px]">18:30H</span>
                         </div>
                     </div>
 
                     <div className="pt-4">
-                        <h3 className="font-serif italic text-2xl text-center mb-6">Confirmação</h3>
-                        
+                        <h3 className="font-serif italic text-2xl text-center mb-6 text-white">Confirmação</h3>
                         <input 
                             type="text" 
                             placeholder="Escreva o seu nome"
-                            className="w-full p-4 bg-white/10 border-b border-white/30 focus:border-white focus:bg-white/20 outline-none text-center text-lg transition-all rounded-xl placeholder:text-white/50 text-white"
+                            className="w-full p-4 bg-white/10 border-b border-white/30 focus:border-white focus:bg-white/20 outline-none text-center text-lg transition-all rounded-xl placeholder:text-white/40 text-white"
+                            value={nome}
                             onChange={(e) => setNome(e.target.value)}
                             required
                         />
@@ -169,16 +185,17 @@ export default function App() {
                             className="w-full p-4 bg-white/10 border border-white/20 rounded-2xl text-sm focus:border-white/50 outline-none placeholder:text-white/30 text-white"
                             placeholder="Nomes dos acompanhantes..."
                             rows="2"
+                            value={acompanhantes}
                             onChange={(e) => setAcompanhantes(e.target.value)}
                         />
                     )}
 
-                    <button className="w-full bg-white text-[#B22222] py-5 rounded-full font-serif font-bold text-sm tracking-[0.3em] shadow-2xl active:scale-95 transition-all">
+                    <button type="submit" className="w-full bg-white text-[#B22222] py-5 rounded-full font-serif font-bold text-sm tracking-[0.3em] shadow-2xl active:scale-95 transition-all">
                         CONFIRMAR AGORA
                     </button>
 
                     <div className="pt-6 mt-4 border-t border-white/10 text-center">
-                        <p className="text-[10px] text-white/40 uppercase tracking-widest mb-3">Localização</p>
+                        <p className="text-[10px] text-white/50 uppercase tracking-widest mb-3">Localização</p>
                         <a 
                             href="https://www.google.com/maps/search/?api=1&query=Di+Fiori,+Av.+Prof.+Nilton+Lins,+1560A+-+Parque+das+Laranjeiras,+Manaus+-+AM,+69058-400" 
                             target="_blank"
@@ -188,8 +205,8 @@ export default function App() {
                         </a>
                     </div>
                 </form>
-            ) : (
-                <div className="text-center py-10 animate-bounce-in">
+            ) : status === 'sucesso' && (
+                <div className="text-center py-10 animate-[bounceIn_0.6s_cubic-bezier(0.68,-0.55,0.265,1.55)]">
                     <CheckCircle className="mx-auto text-white mb-6" size={60} />
                     <h3 className="text-3xl font-serif italic">Confirmado!</h3>
                     <p className="text-white/70 mt-4 text-sm font-light">Mal podemos esperar por este dia. ❤️</p>
@@ -201,7 +218,7 @@ export default function App() {
 
       {/* 4. CHUVA DE CORAÇÕES */}
       {hearts.map(h => (
-        <div key={h.id} className="fixed bottom-[-50px] animate-float-up z-[60] pointer-events-none" style={{ left: `${h.left}%`, animationDelay: `${h.delay}s` }}>
+        <div key={h.id} className="fixed bottom-[-50px] animate-[float-up_5s_ease-in_forwards] z-[60] pointer-events-none" style={{ left: `${h.left}%`, animationDelay: `${h.delay}s` }}>
             <svg width={h.size} height={h.size} viewBox="0 0 24 24" fill="#B22222">
                 <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
             </svg>
@@ -215,7 +232,7 @@ export default function App() {
 
       {/* 6. MODAL ADMIN */}
       {showAdmin && (
-        <div className="fixed inset-0 z-[200] bg-white p-8 overflow-y-auto animate-fade-in">
+        <div className="fixed inset-0 z-[300] bg-white p-8 overflow-y-auto animate-[fadeIn_0.5s_ease-in_forwards]">
             <div className="flex justify-between items-center border-b pb-6 mb-8">
                 <h2 className="text-2xl font-serif italic text-[#B22222]">Lista de Convidados</h2>
                 <button onClick={() => setShowAdmin(false)} className="p-2"><X /></button>
@@ -235,7 +252,7 @@ export default function App() {
         </div>
       )}
 
-      {/* ESTILOS DE ANIMAÇÃO */}
+      {/* ESTILOS DE ANIMAÇÃO NATIVOS */}
       <style>{`
         @keyframes reveal { from { opacity:0; letter-spacing: 0.5em; transform: translateY(10px); } to { opacity:1; letter-spacing: 0.3em; transform: translateY(0); } }
         @keyframes expand { from { width: 0; opacity: 0; } to { width: 64px; opacity: 1; } }
@@ -245,14 +262,6 @@ export default function App() {
         @keyframes fadeOut { 0% { opacity: 1; } 90% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes bounceIn { 0% { transform: scale(0.3); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-        .animate-reveal { animation: reveal 2.5s ease-out forwards; }
-        .animate-expand { animation: expand 1.5s 0.8s ease-in-out forwards; }
-        .animate-fade-in { animation: fadeIn 0.5s ease-in forwards; }
-        .animate-fade-out { animation: fadeOut 3.5s forwards; }
-        .animate-jump-slow { animation: jump-slow 6s infinite ease-in-out; }
-        .animate-jump-fast { animation: jump-fast 5s infinite ease-in-out; }
-        .animate-float-up { animation: float-up 5s ease-in forwards; }
-        .animate-bounce-in { animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
       `}</style>
     </div>
   );
