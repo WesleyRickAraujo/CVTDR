@@ -17,7 +17,6 @@
         @keyframes reveal { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
         @keyframes jump-left { 0%, 100% { transform: rotate(-8deg) translateY(0); } 50% { transform: rotate(-10deg) translateY(-15px); } }
         @keyframes jump-right { 0%, 100% { transform: rotate(8deg) translateY(0); } 50% { transform: rotate(10deg) translateY(-20px); } }
-        @keyframes float-cake { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-8px); } }
         @keyframes fadeOut { 0% { opacity: 1; } 90% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
         @keyframes bounceIn { 0% { transform: scale(0.3); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
         @keyframes float-up { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; } }
@@ -26,7 +25,6 @@
         .animate-fade-out { animation: fadeOut 3.5s forwards; }
         .animate-jump-2 { animation: jump-left 6s infinite ease-in-out; }
         .animate-jump-6 { animation: jump-right 5s infinite ease-in-out; }
-        .animate-float-cake { animation: float-cake 3.5s infinite ease-in-out; }
         .animate-bounce-in { animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
         .animate-float-up { animation: float-up 5s ease-in forwards; position: fixed; bottom: -50px; z-index: 100; pointer-events: none; }
 
@@ -85,9 +83,9 @@
                 </div>
             </div>
 
-            <!-- BOLO (Layer 30) - AJUSTADO PARA A BASE -->
-            <!-- Usei bottom-[-2rem] para o empurrar mais para baixo e aumentei a largura para refletir a nova imagem -->
-            <img src="bolo.png" class="absolute bottom-[-2rem] left-1/2 -translate-x-1/2 w-64 md:w-72 drop-shadow-2xl animate-float-cake layer-front-cake" alt="Bolo">
+            <!-- BOLO (Layer 30) - ESTÁTICO E MENOR (3/4 do tamanho anterior) -->
+            <!-- Usei w-48 (3/4 de 64) e md:w-54 (3/4 de 72). Removi a animação float. -->
+            <img src="bolo.png" class="absolute bottom-[-1.5rem] left-1/2 -translate-x-1/2 w-48 md:w-54 drop-shadow-2xl layer-front-cake" alt="Bolo">
         </div>
 
         <!-- 3. CARD DE INFORMAÇÕES E RSVP -->
