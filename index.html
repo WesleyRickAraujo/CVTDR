@@ -14,22 +14,19 @@
         .font-serif-title { font-family: 'Cormorant Garamond', serif; }
 
         /* ANIMAÇÕES SCRAPBOOK */
-        @keyframes reveal { from { opacity:0; letter-spacing: 0.1em; transform: translateY(15px); } to { opacity:1; letter-spacing: 0.02em; transform: translateY(0); } }
-        @keyframes jump-2 { 0%, 100% { transform: rotate(-12deg) translateY(0); } 50% { transform: rotate(-15deg) translateY(-25px); } }
-        @keyframes jump-6 { 0%, 100% { transform: rotate(12deg) translateY(0); } 50% { transform: rotate(15deg) translateY(-30px); } }
+        @keyframes reveal { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
+        @keyframes jump-left { 0%, 100% { transform: rotate(-10deg) translateY(0); } 50% { transform: rotate(-12deg) translateY(-20px) scale(1.05); } }
+        @keyframes jump-right { 0%, 100% { transform: rotate(10deg) translateY(0); } 50% { transform: rotate(12deg) translateY(-25px) scale(1.05); } }
         @keyframes float-cake { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-10px); } }
-        @keyframes float-cup { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(10deg) translateY(-5px); } }
+        @keyframes float-cup { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(15deg) translateY(-5px); } }
         @keyframes fadeOut { 0% { opacity: 1; } 90% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
         @keyframes bounceIn { 0% { transform: scale(0.3); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-        @keyframes float-up { 
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; } 
-            100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; } 
-        }
+        @keyframes float-up { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; } }
 
         .animate-reveal { animation: reveal 2.5s ease-out forwards; }
         .animate-fade-out { animation: fadeOut 3.5s forwards; }
-        .animate-jump-2 { animation: jump-2 6s infinite ease-in-out; }
-        .animate-jump-6 { animation: jump-right 5s infinite ease-in-out; /* fallback name fix */ animation: jump-6 5s infinite ease-in-out; }
+        .animate-jump-2 { animation: jump-left 6s infinite ease-in-out; }
+        .animate-jump-6 { animation: jump-right 5s infinite ease-in-out; }
         .animate-float-cake { animation: float-cake 3.5s infinite ease-in-out; }
         .animate-float-cup { animation: float-cup 4s infinite ease-in-out; }
         .animate-bounce-in { animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
@@ -44,10 +41,10 @@
         .layer-front { z-index: 25; }
         .layer-ui { z-index: 50; }
 
-        /* Máscara suave na foto */
+        /* Máscara suave na base da foto */
         .photo-mask {
-            mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
-            -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+            mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
         }
     </style>
 </head>
@@ -64,53 +61,58 @@
         </p>
     </div>
 
-    <!-- 2. CARTÃO SCRAPBOOK -->
+    <!-- 2. CARTÃO SCRAPBOOK (ESTILO LIZA) -->
     <div id="main-content" class="relative w-full max-w-sm transition-all duration-1000 opacity-0 translate-y-6 scale-95 mt-4 mb-10">
         
-        <div class="relative shadow-2xl rounded-[2.5rem] overflow-hidden border-[10px] border-white bg-white aspect-[3/4.8]">
+        <!-- Frame Principal -->
+        <div class="relative shadow-2xl rounded-[2.5rem] overflow-hidden border-[12px] border-white bg-white aspect-[3/5] scrapbook-container">
             
             <!-- MOLDURA DE FUNDO -->
             <img src="moldura.jpg" class="absolute inset-0 w-full h-full object-cover layer-bg" alt="Fundo">
             
-            <!-- TEXTOS DO TOPO -->
+            <!-- TEXTO DE CABEÇALHO DO CARD -->
             <div class="absolute top-[8%] inset-x-0 text-center layer-ui px-4 pointer-events-none">
                 <h2 class="text-[#B22222] font-serif-title text-4xl md:text-5xl italic leading-tight drop-shadow-sm">
                     Deborah's Birthday
                 </h2>
-                <p class="text-[#B22222]/80 font-serif-title text-xl md:text-2xl mt-1 tracking-wider">
-                    dia 20
-                </p>
+                <div class="h-[1px] bg-[#B22222]/20 w-12 mx-auto mt-2"></div>
             </div>
 
             <!-- NÚMEROS GIGANTES (Atrás da Aniversariante) -->
-            <img src="numero 2 do 26.jpeg" class="absolute top-[18%] left-[-15%] w-64 md:w-72 animate-jump-2 opacity-90 layer-numbers" alt="2" onerror="this.style.display='none'">
-            <img src="numero 6 do 26.jpeg.jpeg" class="absolute top-[15%] right-[-15%] w-64 md:w-72 animate-jump-6 opacity-90 layer-numbers" alt="6" onerror="this.style.display='none'">
+            <img src="num2.png" class="absolute top-[18%] left-[-10%] w-60 md:w-72 animate-jump-2 opacity-90 layer-numbers" alt="2" onerror="this.style.display='none'">
+            <img src="num6.png" class="absolute top-[15%] right-[-10%] w-60 md:w-72 animate-jump-6 opacity-90 layer-numbers" alt="6" onerror="this.style.display='none'">
 
-            <!-- ANIVERSARIANTE (Camada Central) -->
+            <!-- ANIVERSARIANTE (Camada Central - Menor que os números) -->
             <div class="absolute inset-0 flex items-center justify-center layer-person pointer-events-none">
                 <div class="relative mt-24 photo-mask">
-                    <img src="deborah.png" class="w-48 md:w-56 drop-shadow-[0_20px_40px_rgba(0,0,0,0.4)]" alt="Deborah">
+                    <img src="deborah.png" class="w-40 md:w-48 drop-shadow-[0_20px_40px_rgba(0,0,0,0.4)]" alt="Deborah">
                 </div>
             </div>
 
-            <!-- BOLO E TAÇA (Base do Card) -->
+            <!-- BOLO E TAÇA (Frente/Base) -->
             <div class="absolute bottom-4 left-1/2 -translate-x-1/2 w-full flex flex-col items-center layer-front pointer-events-none">
                 <div class="relative w-full flex justify-center">
-                    <img src="bolo.png" class="w-60 md:w-72 drop-shadow-2xl animate-float-cake relative" style="left:50%" alt="Bolo">
-                    <!-- Taça posicionada na lateral superior do bolo -->
-                    <img src="taca.png" class="absolute -top-12 right-[15%] w-20 md:w-24 animate-float-cup drop-shadow-md" alt="Taça">
+                    <!-- Bolo Centralizado -->
+                    <img src="bolo.png" class="w-60 md:w-72 drop-shadow-2xl animate-float-cake absolute left-1/2" alt="Bolo">
+                    <!-- Taça posicionada artisticamente -->
+                    <img src="taca.png" class="absolute -top-16 right-[15%] w-16 md:w-20 animate-float-cup drop-shadow-md" alt="Taça">
                 </div>
             </div>
         </div>
 
-        <!-- TEXTO DO LOCAL E HORÁRIO (Abaixo do Card) -->
-        <div class="text-center mt-6 space-y-1">
-            <p class="text-[#B22222] font-serif-title text-2xl italic tracking-wide">Di Fiori</p>
-            <p class="text-[#B22222]/60 text-sm font-light tracking-[0.3em]">18:30h</p>
-        </div>
+        <!-- 3. CARD DE INFORMAÇÕES E RSVP -->
+        <div class="w-full mt-8 bg-white/95 backdrop-blur-md p-8 rounded-[3rem] shadow-2xl border border-red-50 relative layer-ui">
+            
+            <!-- Informações do Evento -->
+            <div class="text-center mb-8 pb-6 border-b border-red-50">
+                <p class="text-[#B22222] font-serif-title text-2xl italic tracking-wide">Di Fiori</p>
+                <div class="flex justify-center items-center gap-4 mt-2">
+                    <span class="text-[#B22222]/60 text-xs font-light tracking-widest uppercase">Dia 20</span>
+                    <span class="w-1 h-1 bg-red-200 rounded-full"></span>
+                    <span class="text-[#B22222]/60 text-xs font-light tracking-widest uppercase">18:30h</span>
+                </div>
+            </div>
 
-        <!-- 3. FORMULÁRIO RSVP -->
-        <div class="w-full mt-8 bg-white/95 backdrop-blur-md p-10 rounded-[3rem] shadow-2xl border border-red-50 relative layer-ui">
             <div id="rsvp-view">
                 <div class="text-center mb-8">
                     <h2 class="text-[#B22222] font-bold text-2xl uppercase tracking-[0.2em] font-serif-title italic">Confirmação</h2>
@@ -123,7 +125,7 @@
                     >
 
                     <div class="flex gap-4">
-                        <button type="button" id="btn-solo" onclick="setTipo('Individual')" class="flex-1 py-3 rounded-full border border-[#B22222] bg-[#B22222] text-white font-serif-title font-bold text-xs tracking-[0.1em] shadow-md">
+                        <button type="button" id="btn-solo" onclick="setTipo('Individual')" class="flex-1 py-3 rounded-full border border-[#B22222] bg-[#B22222] text-white font-serif-title font-bold text-xs tracking-[0.1em] shadow-md transition-all">
                             INDIVIDUAL
                         </button>
                         <button type="button" id="btn-group" onclick="setTipo('Grupo')" class="flex-1 py-3 rounded-full border border-red-100 text-[#B22222] font-serif-title font-bold text-xs tracking-[0.1em] transition-all">
@@ -140,8 +142,17 @@
                         Confirmar Agora
                     </button>
                 </form>
+
+                <!-- Botão de Localização -->
+                <a href="https://www.google.com/maps/search/?api=1&query=Di+Fiori,+Av.+Prof.+Nilton+Lins,+1560A+-+Parque+das+Laranjeiras,+Manaus+-+AM,+69058-400" 
+                   target="_blank" 
+                   class="flex items-center justify-center gap-2 mt-8 text-[#B22222]/60 hover:text-[#B22222] transition-colors text-xs font-medium tracking-widest uppercase">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    Ver Localização
+                </a>
             </div>
 
+            <!-- Mensagem de Sucesso -->
             <div id="success-view" class="hidden-view text-center py-10 animate-bounce-in">
                 <div class="flex justify-center mb-6">
                     <svg width="70" height="70" viewBox="0 0 24 24" fill="#B22222">
@@ -149,23 +160,28 @@
                     </svg>
                 </div>
                 <h3 class="text-3xl font-bold text-[#B22222] font-serif-title italic">Confirmado!</h3>
-                <p class="text-gray-500 text-sm mt-4 font-light">Obrigado! Nos vemos lá. ❤️</p>
+                <p class="text-gray-500 text-sm mt-4 font-light italic">Mal podemos esperar. ❤️</p>
+                <a href="https://www.google.com/maps/search/?api=1&query=Di+Fiori,+Av.+Prof.+Nilton+Lins,+1560A+-+Parque+das+Laranjeiras,+Manaus+-+AM,+69058-400" 
+                   target="_blank" 
+                   class="inline-block mt-8 px-6 py-3 border border-red-100 rounded-full text-[#B22222] text-xs font-bold uppercase tracking-widest hover:bg-red-50 transition-all">
+                    Abrir no Maps
+                </a>
             </div>
         </div>
     </div>
 
-    <!-- BOTÃO ADMIN -->
-    <button onclick="acessoAdmin()" class="fixed bottom-6 right-6 p-4 bg-white/40 rounded-full shadow-sm text-[#B22222]/20 z-50">
+    <!-- BOTÃO ADMIN (Geralmente no rodapé) -->
+    <button onclick="acessoAdmin()" class="fixed bottom-6 right-6 p-4 bg-white/40 rounded-full text-[#B22222]/20 z-50">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><circle cx="3" cy="6" r="1"></circle><circle cx="3" cy="12" r="1"></circle><circle cx="3" cy="18" r="1"></circle></svg>
     </button>
 
-    <!-- MODAL LISTA -->
-    <div id="admin-modal" class="hidden-view fixed inset-0 z-[200] bg-white p-8 overflow-y-auto font-serif">
+    <!-- MODAL LISTA ADMIN -->
+    <div id="admin-modal" class="hidden-view fixed inset-0 z-[300] bg-white p-8 overflow-y-auto font-serif">
         <div class="flex justify-between items-center border-b pb-6 mb-8">
-            <h2 class="text-2xl font-bold text-[#B22222] font-serif-title tracking-widest uppercase text-center w-full">Lista</h2>
+            <h2 class="text-2xl font-bold text-[#B22222] font-serif-title tracking-widest uppercase">Lista</h2>
             <button onclick="document.getElementById('admin-modal').classList.add('hidden-view')" class="text-4xl leading-none">&times;</button>
         </div>
-        <div id="admin-stats" class="mb-8 p-10 bg-red-50 rounded-[2.5rem] text-7xl font-bold text-[#B22222] font-serif-title text-center">
+        <div id="admin-stats" class="mb-8 p-10 bg-red-50 rounded-[2.5rem] text-7xl font-bold text-[#B22222] font-serif-title text-center shadow-inner">
             0
         </div>
         <div id="list-container" class="space-y-4"></div>
@@ -191,6 +207,7 @@
         const appId = "cvt-debora-ramos";
         let currentType = 'Individual';
 
+        // Timer de Introdução
         setTimeout(() => {
             const main = document.getElementById('main-content');
             main.classList.remove('opacity-0', 'translate-y-6', 'scale-95');
