@@ -13,7 +13,6 @@
         :root {
             --brand-red: #B22222;
             --sand-bg: #FDF5E6;
-            --pure-white: #fffcfc;
         }
 
         body { 
@@ -26,22 +25,13 @@
 
         .font-serif-title { font-family: 'Cormorant Garamond', serif; }
 
-        /* Sandy Texture - Aplicada de forma que não bloqueie a moldura */
-        .card-texture-overlay {
-            position: absolute;
-            inset: 0;
-            background-image: url("https://www.transparenttextures.com/patterns/sandpaper.png");
-            background-size: 200px;
-            opacity: 0.1; /* Subtil para não esconder o JPG */
-            pointer-events: none;
-            z-index: 25; /* Acima das fotos, abaixo da UI */
-        }
-
-        /* Hierarchy Management (Strict Z-Index) */
-        .layer-base { z-index: 1; }   /* Moldura JPG */
-        .layer-mid { z-index: 10; }   /* Números e Deborah */
-        .layer-top { z-index: 20; }   /* Bolo e Título */
-        .layer-ui { z-index: 50; }    /* Interface/Botões */
+        /* Estrita Hierarquia de Camadas */
+        .z-moldura { z-index: 10; }   /* Plano de Fundo Base */
+        .z-numeros { z-index: 20; }   /* Atrás da Deborah */
+        .z-person  { z-index: 30; }   /* Deborah */
+        .z-title   { z-index: 40; }   /* Título */
+        .z-front   { z-index: 50; }   /* Bolo (Frente de tudo) */
+        .z-ui      { z-index: 100; }  /* Interface do usuário */
 
         /* Masking for photo integration */
         .photo-mask {
@@ -50,7 +40,7 @@
         }
 
         /* Animations */
-        @keyframes revealTitle { from { opacity:0; letter-spacing: 0.4em; transform: translateY(10px); } to { opacity:1; letter-spacing: 0.1em; transform: translateY(0); } }
+        @keyframes revealTitle { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
         @keyframes jump2 { 0%, 100% { transform: rotate(-8deg) translateY(0); } 50% { transform: rotate(-10deg) translateY(-12px); } }
         @keyframes jump6 { 0%, 100% { transform: rotate(8deg) translateY(0); } 50% { transform: rotate(10deg) translateY(-18px); } }
         @keyframes introOut { 0% { opacity: 1; } 90% { opacity: 1; } 100% { opacity: 0; visibility: hidden; pointer-events: none; } }
@@ -60,7 +50,7 @@
         .anim-intro-exit { animation: introOut 3.5s forwards; }
         .anim-jump-2 { animation: jump2 6s infinite ease-in-out; }
         .anim-jump-6 { animation: jump6 5s infinite ease-in-out; }
-        .anim-heart-rise { animation: floatUp 5s ease-in forwards; position: fixed; bottom: -50px; z-index: 100; pointer-events: none; }
+        .anim-heart-rise { animation: floatUp 5s ease-in forwards; position: fixed; bottom: -50px; z-index: 200; pointer-events: none; }
         
         .hidden-view { display: none !important; }
 
@@ -82,7 +72,7 @@
 <body class="min-h-screen flex flex-col items-center p-4">
 
     <!-- INTRODUCTION SCREEN -->
-    <aside id="intro-screen" class="fixed inset-0 z-[200] bg-[#FDF5E6] flex flex-col items-center justify-center anim-intro-exit">
+    <aside id="intro-screen" class="fixed inset-0 z-[500] bg-[#FDF5E6] flex flex-col items-center justify-center anim-intro-exit">
         <h1 class="text-5xl md:text-7xl text-[#B22222] font-serif-title font-medium italic anim-reveal text-center px-4">
             Deborah Ramos
         </h1>
@@ -95,39 +85,36 @@
     <!-- MAIN COMPOSITION -->
     <main id="app-container" class="relative w-full max-w-sm transition-all duration-1000 opacity-0 translate-y-6 scale-95 mt-4 mb-10">
         
-        <!-- Scrapbook Card -->
-        <div class="relative shadow-2xl rounded-[2.5rem] overflow-hidden border-[10px] border-white bg-[#fffcfc] aspect-[3/5]">
+        <!-- Scrapbook Card - TEXTURA REMOVIDA PARA GARANTIR VISIBILIDADE DA MOLDURA -->
+        <div class="relative shadow-2xl rounded-[2.5rem] overflow-hidden border-[10px] border-white bg-white aspect-[3/5]">
             
-            <!-- TEXTURA ARENOSA (Overlay) -->
-            <div class="card-texture-overlay"></div>
-
-            <!-- LAYER 1: MOLDURA JPG (Fundo Real) -->
-            <img src="moldura.jpg" class="absolute inset-0 w-full h-full object-fill layer-base pointer-events-none" alt="Moldura">
+            <!-- CAMADA 1: MOLDURA JPG (Fundo) -->
+            <img src="moldura.jpg" class="absolute inset-0 w-full h-full object-fill z-moldura pointer-events-none" alt="Moldura">
             
-            <!-- LAYER 10: NÚMEROS (Mais baixos para dar espaço ao título) -->
-            <img src="num2.png" class="absolute top-[38%] left-[2%] w-36 md:w-44 anim-jump-2 opacity-95 layer-mid" alt="2">
-            <img src="num6.png" class="absolute top-[36%] right-[2%] w-36 md:w-44 anim-jump-6 opacity-95 layer-mid" alt="6">
+            <!-- CAMADA 2: NÚMEROS (Sobre a moldura) -->
+            <img src="num2.png" class="absolute top-[38%] left-[2%] w-36 md:w-44 anim-jump-2 opacity-95 z-numeros" alt="2">
+            <img src="num6.png" class="absolute top-[36%] right-[2%] w-36 md:w-44 anim-jump-6 opacity-95 z-numeros" alt="6">
 
-            <!-- LAYER 20: TÍTULO -->
-            <header class="absolute top-[18%] inset-x-0 text-center layer-top px-4 pointer-events-none">
+            <!-- CAMADA 4: TÍTULO -->
+            <header class="absolute top-[18%] inset-x-0 text-center z-title px-4 pointer-events-none">
                 <h2 class="text-[#B22222] font-serif-title text-4xl md:text-5xl italic leading-tight drop-shadow-sm">
                     Deborah's Birthday
                 </h2>
             </header>
 
-            <!-- LAYER 15: ANIVERSARIANTE -->
-            <figure class="absolute inset-0 flex items-center justify-center layer-mid pointer-events-none">
+            <!-- CAMADA 3: ANIVERSARIANTE -->
+            <figure class="absolute inset-0 flex items-center justify-center z-person pointer-events-none">
                 <div class="relative mt-44 photo-mask">
                     <img src="deborah.png" class="w-32 md:w-40 drop-shadow-[0_20px_40px_rgba(0,0,0,0.4)]" alt="Deborah">
                 </div>
             </figure>
 
-            <!-- LAYER 20: BOLO (Escala 5/7, Estático) -->
-            <img src="bolo.png" class="absolute bottom-[-0.5rem] left-1/2 -translate-x-1/2 w-40 md:w-48 drop-shadow-2xl layer-top" alt="Bolo">
+            <!-- CAMADA 5: BOLO (Estático e 5/7 do tamanho anterior) -->
+            <img src="bolo.png" class="absolute bottom-[-0.5rem] left-1/2 -translate-x-1/2 w-32 md:w-40 drop-shadow-2xl z-front" alt="Bolo">
         </div>
 
-        <!-- RSVP SECTION (Inverted: Red Background, White Text) -->
-        <section class="w-full mt-8 bg-[#B22222] p-8 md:p-10 rounded-[3rem] shadow-2xl border border-white/10 relative layer-ui text-white">
+        <!-- RSVP SECTION (Sessão Invertida e Vibrante) -->
+        <section class="w-full mt-8 bg-[#B22222] p-8 md:p-10 rounded-[3rem] shadow-2xl border border-white/10 relative z-ui text-white">
             
             <!-- Info Header -->
             <div class="text-center mb-8 pb-6 border-b border-white/20">
@@ -199,7 +186,7 @@
     </main>
 
     <!-- Master Admin Access -->
-    <button id="master-panel-btn" class="fixed bottom-6 right-6 p-4 bg-white/10 rounded-full text-white/5 z-50">
+    <button id="master-panel-btn" class="fixed bottom-6 right-6 p-4 bg-white/10 rounded-full text-white/5 z-[150]">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><circle cx="3" cy="6" r="1"></circle><circle cx="3" cy="12" r="1"></circle><circle cx="3" cy="18" r="1"></circle></svg>
     </button>
 
@@ -209,7 +196,7 @@
             <h2 class="text-2xl font-bold text-[#B22222] font-serif-title tracking-widest uppercase text-center w-full">Presenças</h2>
             <button id="close-admin" class="text-4xl">&times;</button>
         </div>
-        <div id="guest-count" class="mb-8 p-10 bg-red-50 rounded-[2.5rem] text-7xl font-bold text-[#B22222] font-serif-title text-center">0</div>
+        <div id="guest-count" class="mb-8 p-10 bg-red-50 rounded-[2.5rem] text-7xl font-bold text-[#B22222] font-serif-title text-center shadow-inner">0</div>
         <div id="guest-list" class="space-y-4"></div>
     </dialog>
 
