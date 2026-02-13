@@ -96,19 +96,18 @@
                 </h2>
             </header>
 
-            <!-- CAMADA 3: ANIVERSARIANTE (Pura e Original) -->
+            <!-- CAMADA 3: ANIVERSARIANTE (Escala aumentada para melhor preenchimento) -->
             <figure class="absolute inset-0 flex items-center justify-center z-person pointer-events-none">
-                <div class="relative mt-44">
-                    <!-- Removido 'photo-mask' e 'drop-shadow' para manter a imagem original -->
-                    <img src="deborah.png" class="w-32 md:w-40" alt="Deborah">
+                <div class="relative mt-36">
+                    <img src="deborah.png" class="w-44 md:w-56" alt="Deborah">
                 </div>
             </figure>
 
-            <!-- CAMADA 5: BOLO (Frente de tudo) -->
-            <img src="bolo.png" class="absolute bottom-[-0.5rem] left-1/2 -translate-x-1/2 w-32 md:w-40 drop-shadow-2xl z-front" alt="Bolo">
+            <!-- CAMADA 5: BOLO (Subido e aumentado para sobrepor a foto e tirar o espaço grosseiro) -->
+            <img src="bolo.png" class="absolute bottom-[0.5rem] left-1/2 -translate-x-1/2 w-48 md:w-60 drop-shadow-2xl z-front" alt="Bolo">
         </div>
 
-        <!-- RSVP SECTION (Invertida e Vibrante) -->
+        <!-- RSVP SECTION (Sessão Invertida e Vibrante) -->
         <section class="w-full mt-8 bg-[#B22222] p-8 md:p-10 rounded-[3rem] shadow-2xl border border-white/10 relative z-ui text-white">
             
             <div class="text-center mb-8 pb-6 border-b border-white/20">
@@ -275,7 +274,8 @@
                     h.className = 'anim-heart-rise';
                     h.style.left = Math.random() * 100 + '%';
                     h.style.animationDelay = Math.random() * 3 + 's';
-                    h.innerHTML = `<svg width="${15 + Math.random()*25}" height="40" viewBox="0 0 24 24" fill="white"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
+                    // Alterado fill para Vermelho Deborah
+                    h.innerHTML = `<svg width="${15 + Math.random()*25}" height="40" viewBox="0 0 24 24" fill="#B22222"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
                     document.body.appendChild(h);
                 }
             },
