@@ -32,7 +32,7 @@
             background-image: url("https://www.transparenttextures.com/patterns/sandpaper.png");
         }
 
-        /* Scrapbook Layering System */
+        /* Scrapbook Layering System - Respeitando a Hierarquia */
         .layer-bg-moldura { z-index: 1; }
         .layer-numbers { z-index: 5; }
         .layer-title { z-index: 10; }
@@ -50,7 +50,7 @@
         @keyframes reveal { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
         @keyframes jump-left { 0%, 100% { transform: rotate(-8deg) translateY(0); } 50% { transform: rotate(-10deg) translateY(-15px); } }
         @keyframes jump-right { 0%, 100% { transform: rotate(8deg) translateY(0); } 50% { transform: rotate(10deg) translateY(-20px); } }
-        @keyframes fadeOut { 0% { opacity: 1; } 90% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
+        @keyframes fadeOut { 0% { opacity: 1; } 90% { opacity: 1; } 100% { opacity: 0; visibility: hidden; pointer-events: none; } }
         @keyframes float-up { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; } }
 
         .animate-reveal { animation: reveal 2.5s ease-out forwards; }
@@ -84,11 +84,11 @@
             <!-- LAYER 1: BACKGROUND FRAME -->
             <img src="moldura.png" class="absolute inset-0 w-full h-full object-fill layer-bg-moldura" alt="Moldura">
             
-            <!-- LAYER 2: DECORATIVE NUMBERS -->
+            <!-- LAYER 2: DECORATIVE NUMBERS (20% menores e mais baixos) -->
             <img src="num2.png" class="absolute top-[38%] left-[2%] w-40 md:w-48 animate-jump-2 opacity-95 layer-numbers" alt="2">
             <img src="num6.png" class="absolute top-[36%] right-[2%] w-40 md:w-48 animate-jump-6 opacity-95 layer-numbers" alt="6">
 
-            <!-- LAYER 3: INVITATION TITLE -->
+            <!-- LAYER 3: INVITATION TITLE (Posicionado para não competir com a moldura) -->
             <header class="absolute top-[20%] inset-x-0 text-center layer-title px-4 pointer-events-none">
                 <h2 class="text-[#B22222] font-serif-title text-4xl md:text-5xl italic leading-tight drop-shadow-sm">
                     Deborah's Birthday
@@ -102,7 +102,7 @@
                 </div>
             </figure>
 
-            <!-- LAYER 5: STATIC CAKE (Scale adjusted to 5/7) -->
+            <!-- LAYER 5: STATIC CAKE (Scale adjusted to 5/7 - aprox 70% do card) -->
             <img src="bolo.png" class="absolute bottom-[-0.5rem] left-1/2 -translate-x-1/2 w-32 md:w-40 drop-shadow-2xl layer-front-cake" alt="Bolo">
         </div>
 
@@ -202,23 +202,37 @@
         import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 
         /** * APP CONFIGURATION 
+         * Guards added to prevent script crashes if environment variables are missing
          */
-        const CONFIG = {
-            appId: typeof __app_id !== 'undefined' ? __app_id : 'default-app-id',
-            firebase: JSON.parse(__firebase_config)
+        const getFirebaseConfig = () => {
+            try {
+                if (typeof __firebase_config !== 'undefined') {
+                    return JSON.parse(__firebase_config);
+                }
+            } catch (e) { console.error("Config parse error", e); }
+            
+            // Fallback para as chaves reais caso a variável de sistema falhe
+            return {
+                apiKey: "AIzaSyD5kr79mLhJyZUxu6oTkNBG6tvlYv7bA20",
+                authDomain: "cvt-debora-ramos.firebaseapp.com",
+                projectId: "cvt-debora-ramos",
+                storageBucket: "cvt-debora-ramos.firebasestorage.app",
+                messagingSenderId: "1043172143750",
+                appId: "1:1043172143750:web:8dcc9f2cf0e519eb309707"
+            };
         };
 
-        /** * STATE MANAGEMENT 
-         */
+        const CONFIG = {
+            appId: typeof __app_id !== 'undefined' ? __app_id : 'cvt-debora-ramos',
+            firebase: getFirebaseConfig()
+        };
+
         const AppState = {
             user: null,
-            rsvpType: 'Individual', // Default
-            isLoading: false,
+            rsvpType: 'Individual',
             adminUnsubscribe: null
         };
 
-        /** * FIREBASE SERVICE LAYER (Rule 1 & 3)
-         */
         const FirebaseService = {
             app: initializeApp(CONFIG.firebase),
             auth: null,
@@ -227,39 +241,18 @@
             async init() {
                 this.auth = getAuth(this.app);
                 this.db = getFirestore(this.app);
-                
                 try {
                     const cred = await signInAnonymously(this.auth);
                     AppState.user = cred.user;
-                    console.log("Authenticated anonymously:", AppState.user.uid);
-                } catch (error) {
-                    console.error("Auth Failed:", error);
-                }
+                } catch (error) { console.error("Firebase Auth Error:", error); }
             },
 
             async submitRSVP(payload) {
-                if (!AppState.user) throw new Error("Aguardando autenticação...");
-                
                 const colRef = collection(this.db, 'artifacts', CONFIG.appId, 'public', 'data', 'presencas');
-                return await addDoc(colRef, {
-                    ...payload,
-                    uid: AppState.user.uid,
-                    timestamp: serverTimestamp()
-                });
-            },
-
-            listenToPresencas(callback) {
-                if (!AppState.user) return null;
-                const colRef = collection(this.db, 'artifacts', CONFIG.appId, 'public', 'data', 'presencas');
-                return onSnapshot(colRef, 
-                    (snapshot) => callback(snapshot.docs.map(doc => doc.data())),
-                    (error) => console.error("Firestore Error:", error)
-                );
+                return await addDoc(colRef, { ...payload, timestamp: serverTimestamp() });
             }
         };
 
-        /** * UI & ANIMATION MANAGER
-         */
         const UIManager = {
             elements: {
                 main: document.getElementById('main-content'),
@@ -275,23 +268,19 @@
             },
 
             init() {
-                // Intro animation sequence
+                // Intro animation sequence - Garantido que roda
                 setTimeout(() => {
                     this.elements.main.classList.remove('opacity-0', 'translate-y-6', 'scale-95');
                     this.elements.main.classList.add('opacity-100', 'translate-y-0', 'scale-100');
                 }, 3200);
 
-                // RSVP Type Toggles
                 this.elements.btnSolo.onclick = () => this.setRSVPType('Individual');
                 this.elements.btnGroup.onclick = () => this.setRSVPType('Grupo');
-
-                // Form Submit
                 this.elements.form.onsubmit = async (e) => {
                     e.preventDefault();
                     await this.handleRSVPSubmit();
                 };
 
-                // Admin Controls
                 document.getElementById('admin-trigger').onclick = () => this.handleAdminAccess();
                 document.getElementById('admin-close').onclick = () => this.elements.adminModal.close();
             },
@@ -299,28 +288,14 @@
             setRSVPType(type) {
                 AppState.rsvpType = type;
                 const isSolo = type === 'Individual';
-                
-                // Style Toggles
-                this.elements.btnSolo.classList.toggle('bg-[#B22222]', isSolo);
-                this.elements.btnSolo.classList.toggle('text-white', isSolo);
-                this.elements.btnSolo.classList.toggle('border-red-100', !isSolo);
-
-                this.elements.btnGroup.classList.toggle('bg-[#B22222]', !isSolo);
-                this.elements.btnGroup.classList.toggle('text-white', !isSolo);
-                this.elements.btnGroup.classList.toggle('border-red-100', isSolo);
-
-                // Textarea visibility
+                this.elements.btnSolo.className = isSolo ? 'btn-type flex-1 py-3 rounded-full border border-[#B22222] bg-[#B22222] text-white font-serif-title font-bold text-xs tracking-[0.1em] shadow-md' : 'btn-type flex-1 py-3 rounded-full border border-red-100 text-[#B22222] font-serif-title font-bold text-xs tracking-[0.1em]';
+                this.elements.btnGroup.className = !isSolo ? 'btn-type flex-1 py-3 rounded-full border border-[#B22222] bg-[#B22222] text-white font-serif-title font-bold text-xs tracking-[0.1em] shadow-md' : 'btn-type flex-1 py-3 rounded-full border border-red-100 text-[#B22222] font-serif-title font-bold text-xs tracking-[0.1em]';
                 this.elements.textarea.classList.toggle('hidden', isSolo);
-                if (!isSolo) this.elements.textarea.focus();
             },
 
             async handleRSVPSubmit() {
                 const btn = document.getElementById('btn-submit');
                 const nome = document.getElementById('input-nome').value.trim();
-                const acompanhantes = this.elements.textarea.value.trim();
-
-                if (!nome) return;
-
                 btn.disabled = true;
                 btn.innerText = "A GUARDAR...";
 
@@ -328,15 +303,12 @@
                     await FirebaseService.submitRSVP({
                         nome,
                         tipo: AppState.rsvpType,
-                        acompanhantes: AppState.rsvpType === 'Grupo' ? acompanhantes : ""
+                        acompanhantes: AppState.rsvpType === 'Grupo' ? this.elements.textarea.value : ""
                     });
-
                     this.elements.rsvpView.classList.add('hidden-view');
                     this.elements.successView.classList.remove('hidden-view');
-                    this.elements.successView.classList.add('animate-bounce-in');
                     this.triggerCelebration();
                 } catch (err) {
-                    console.error(err);
                     btn.disabled = false;
                     btn.innerText = "CONFIRMAR AGORA";
                 }
@@ -358,45 +330,34 @@
                 const pass = prompt("Palavra-passe:");
                 if (pass === "Deborah2026") {
                     this.elements.adminModal.showModal();
-                    if (AppState.adminUnsubscribe) AppState.adminUnsubscribe();
-                    
-                    AppState.adminUnsubscribe = FirebaseService.listenToPresencas((data) => {
-                        this.renderAdminList(data);
+                    const colRef = collection(FirebaseService.db, 'artifacts', CONFIG.appId, 'public', 'data', 'presencas');
+                    onSnapshot(colRef, (snapshot) => {
+                        this.renderAdminList(snapshot.docs.map(doc => doc.data()));
                     });
                 }
             },
 
             renderAdminList(data) {
                 this.elements.listContainer.innerHTML = "";
-                let totalPessoas = 0;
-
+                let total = 0;
                 data.forEach(item => {
                     let count = 1;
-                    if(item.tipo === 'Grupo' && item.acompanhantes) {
-                        count += item.acompanhantes.split(',').filter(x => x.trim()).length;
-                    }
-                    totalPessoas += count;
-
+                    if(item.tipo === 'Grupo' && item.acompanhantes) count += item.acompanhantes.split(',').length;
+                    total += count;
                     const row = document.createElement('div');
-                    row.className = "p-6 bg-gray-50 rounded-[1.5rem] border border-gray-100 shadow-sm transition-all";
-                    row.innerHTML = `
-                        <p class="text-[10px] font-bold text-[#B22222] uppercase tracking-[0.2em] mb-1">${item.tipo}</p>
-                        <p class="font-bold text-gray-800 text-lg font-serif-title">${item.nome}</p>
-                        ${item.acompanhantes ? `<p class="text-xs text-gray-500 mt-3 italic border-t pt-3 border-gray-200">+ ${item.acompanhantes}</p>` : ''}
-                    `;
+                    row.className = "p-6 bg-gray-50 rounded-[1.5rem] border border-gray-100 shadow-sm";
+                    row.innerHTML = `<p class="text-[10px] font-bold text-[#B22222] mb-1">${item.tipo}</p><p class="font-bold text-gray-800 text-lg font-serif-title">${item.nome}</p>${item.acompanhantes ? `<p class="text-xs text-gray-500 mt-3 border-t pt-3 italic">+ ${item.acompanhantes}</p>` : ''}`;
                     this.elements.listContainer.appendChild(row);
                 });
-                this.elements.adminStats.innerText = totalPessoas;
+                this.elements.adminStats.innerText = total;
             }
         };
 
-        /** * BOOTSTRAP APP 
-         */
-        window.onload = async () => {
-            await FirebaseService.init();
-            UIManager.init();
+        // Bootstrapping
+        window.onload = () => {
+            UIManager.init(); // Inicia a interface imediatamente
+            FirebaseService.init(); // Carrega o Firebase em background
         };
-
     </script>
 </body>
 </html>
