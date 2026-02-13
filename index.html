@@ -1,173 +1,250 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Convite Especial</title>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    
-    <style>
-        :root {
-            --primary-color: #ff4d6d;
-            --bg-color: #fdf0f3;
-        }
+import React, { useState, useEffect } from 'react';
+import { initializeApp } from 'firebase/app';
+import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query } from 'firebase/firestore';
+import { getAuth, signInAnonymously } from 'firebase/auth';
+import { List, X, CheckCircle, Users, User } from 'lucide-react';
 
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--bg-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+// --- CONFIGURAÇÃO FIREBASE (LINHAS 10-17) ---
+const firebaseConfig = {
+    apiKey: "AIzaSyD5kr79mLhJyZUxu6oTkNBG6tvlYv7bA20",
+    authDomain: "cvt-debora-ramos.firebaseapp.com",
+    projectId: "cvt-debora-ramos",
+    storageBucket: "cvt-debora-ramos.firebasestorage.app",
+    messagingSenderId: "1043172143750",
+    appId: "1:1043172143750:web:8dcc9f2cf0e519eb309707"
+};
 
-        .card {
-            background: white;
-            width: 90%;
-            max-width: 400px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            overflow: hidden;
-            text-align: center;
-            padding-bottom: 30px;
-            border: 1px solid rgba(0,0,0,0.05);
-        }
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+const appId = "cvt-debora-ramos";
 
-        .header-image {
-            width: 100%;
-            height: 200px;
-            background: #ffe5ec;
-            background-size: cover;
-        }
+export default function App() {
+  const [nome, setNome] = useState('');
+  const [tipo, setTipo] = useState('Individual');
+  const [acompanhantes, setAcompanhantes] = useState('');
+  const [status, setStatus] = useState('entrada'); // entrada, convite, sucesso
+  const [showAdmin, setShowAdmin] = useState(false);
+  const [lista, setLista] = useState([]);
+  const [hearts, setHearts] = useState([]);
 
-        .content {
-            padding: 25px;
-        }
+  useEffect(() => {
+    signInAnonymously(auth);
+    // Animação de entrada elegante: 3 segundos
+    const timer = setTimeout(() => setStatus('convite'), 3500);
+    return () => clearTimeout(timer);
+  }, []);
 
-        h2 { color: #333; margin-top: 0; }
-        p { color: #666; line-height: 1.5; }
+  const handleRSVP = async (e) => {
+    e.preventDefault();
+    try {
+      await addDoc(collection(db, "artifacts", appId, "public", "data", "presencas"), {
+        nome,
+        tipo,
+        acompanhantes: tipo === 'Grupo' ? acompanhantes : "",
+        data: serverTimestamp()
+      });
+      setStatus('sucesso');
+      lancarCoracoes();
+    } catch (err) {
+      alert("Erro ao confirmar presença. Tente novamente.");
+    }
+  };
 
-        .rsvp-area {
-            margin-top: 10px;
-            padding: 0 20px;
-        }
+  const lancarCoracoes = () => {
+    const novosCoracoes = Array.from({ length: 25 }).map((_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      delay: Math.random() * 3,
+      size: 15 + Math.random() * 35
+    }));
+    setHearts(novosCoracoes);
+  };
 
-        input[type="text"] {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid #ddd;
-            border-radius: 25px;
-            margin-bottom: 15px;
-            outline: none;
-            font-size: 16px; /* Evita zoom no iPhone */
-            box-sizing: border-box;
-        }
+  const abrirAdmin = () => {
+    const pass = prompt("Palavra-passe da Deborah:");
+    if (pass === "Deborah2026") { // LINHA 70: SENHA ADMIN
+      setShowAdmin(true);
+      const q = query(collection(db, "artifacts", appId, "public", "data", "presencas"));
+      onSnapshot(q, (snapshot) => {
+        setLista(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      });
+    } else if (pass !== null) {
+      alert("Acesso negado.");
+    }
+  };
 
-        button {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            width: 100%;
-            padding: 14px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 16px;
-            transition: transform 0.2s, background 0.2s;
-        }
+  return (
+    <div className="min-h-screen bg-[#FDF5E6] flex flex-col items-center justify-center p-4 overflow-x-hidden font-serif">
+      
+      {/* 1. ECRÃ DE ENTRADA (ANIMAÇÃO ELEGANTE) */}
+      {status === 'entrada' && (
+        <div className="fixed inset-0 z-[100] bg-[#FDF5E6] flex flex-col items-center justify-center animate-fade-out">
+            <h1 className="text-4xl md:text-5xl text-[#B22222] font-light tracking-[0.2em] animate-reveal">
+                DEBORAH RAMOS
+            </h1>
+            <div className="w-20 h-[1px] bg-[#B22222] mt-6 animate-expand"></div>
+            <p className="mt-6 tracking-[0.5em] text-[#B22222]/50 text-xs uppercase animate-fade-in-slow">
+                A celebrar 26 anos
+            </p>
+        </div>
+      )}
 
-        button:active { transform: scale(0.95); }
-
-        #mensagem-sucesso {
-            display: none;
-            color: var(--primary-color);
-            font-weight: bold;
-            margin-top: 15px;
-            font-size: 1.1rem;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="card">
-        <div class="header-image"></div>
+      {/* 2. COMPOSIÇÃO VISUAL (ESTILO SCRAPBOOK) */}
+      <div className={`relative w-full max-w-sm transition-all duration-1000 ${status === 'entrada' ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
         
-        <div class="content">
-            <h2>Deborah Ramos</h2>
-            <p>Você foi convidado!</p>
-            <p><strong>Data:</strong> 20/10/2026 às 19h</p>
-            <p><strong>Local:</strong> Sua Casa ou Evento</p>
-        </div>
+        {/* Moldura / Background Principal */}
+        <div className="relative shadow-2xl rounded-2xl overflow-hidden border-[12px] border-white bg-white">
+            <img src="moldura.jpg" className="w-full h-auto block" alt="Fundo" />
+            
+            {/* Números "Pulando" Atrás (Camada 1) */}
+            <img src="num2.png" className="absolute top-8 left-4 w-24 md:w-28 animate-jump-slow z-10" alt="2" />
+            <img src="num6.png" className="absolute top-6 right-4 w-24 md:w-28 animate-jump-fast z-10" alt="6" />
 
-        <div class="rsvp-area">
-            <form id="invite-form">
-                <input type="text" id="nome" placeholder="Digite seu nome para confirmar" required>
-                <button type="submit" id="btn-confirmar">Confirmar Presença</button>
-            </form>
-            <div id="mensagem-sucesso">🎉 Presença Confirmada! ❤️</div>
+            {/* Aniversariante (Camada 2) */}
+            <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
+                <div className="relative mt-20">
+                    <img src="deborah.png" className="w-56 md:w-64 drop-shadow-[0_20px_20px_rgba(0,0,0,0.3)]" alt="Deborah" />
+                    {/* Chapéu na Cabeça (Camada 3) */}
+                    <img src="chapeu.png" className="absolute -top-10 left-1/2 -translate-x-1/2 w-16 md:w-20 rotate-6 animate-pulse" alt="Chapéu" />
+                </div>
+            </div>
+
+            {/* Taça (Camada de Frente) */}
+            <img src="taca.png" className="absolute bottom-4 right-4 w-16 md:w-20 z-30 drop-shadow-lg animate-float" alt="Taça" />
         </div>
+      </div>
+
+      {/* 3. FORMULÁRIO DE CONFIRMAÇÃO VIBRANTE */}
+      <div className={`w-full max-w-sm mt-8 transition-all duration-700 delay-500 ${status === 'entrada' ? 'opacity-0 translate-y-10' : 'opacity-100 translate-y-0'}`}>
+        <div className="bg-white/80 backdrop-blur-md p-6 rounded-[2rem] shadow-xl border border-red-50/50">
+            {status === 'convite' ? (
+                <form onSubmit={handleRSVP} className="space-y-5">
+                    <div className="text-center">
+                        <h3 className="text-[#B22222] font-bold text-xl uppercase tracking-widest">Confirmar Presença</h3>
+                        <p className="text-gray-500 text-sm mt-1">Deborah aguarda por si!</p>
+                    </div>
+
+                    <input 
+                        type="text" 
+                        placeholder="Escreva o seu nome"
+                        className="w-full p-4 bg-red-50/30 border-b-2 border-red-100 focus:border-[#B22222] outline-none text-center text-lg transition-all rounded-xl"
+                        onChange={(e) => setNome(e.target.value)}
+                        required
+                    />
+
+                    <div className="flex gap-2">
+                        <button type="button" onClick={() => setTipo('Individual')} className={`flex-1 flex items-center justify-center gap-2 p-3 rounded-full border-2 transition-all font-bold text-xs ${tipo === 'Individual' ? 'bg-[#B22222] border-[#B22222] text-white' : 'border-red-50 text-[#B22222]'}`}>
+                            <User size={14} /> INDIVIDUAL
+                        </button>
+                        <button type="button" onClick={() => setTipo('Grupo')} className={`flex-1 flex items-center justify-center gap-2 p-3 rounded-full border-2 transition-all font-bold text-xs ${tipo === 'Grupo' ? 'bg-[#B22222] border-[#B22222] text-white' : 'border-red-50 text-[#B22222]'}`}>
+                            <Users size={14} /> + FAMÍLIA
+                        </button>
+                    </div>
+
+                    {tipo === 'Grupo' && (
+                        <textarea 
+                            className="w-full p-4 bg-red-50/30 border border-red-100 rounded-2xl text-sm focus:border-red-400 outline-none animate-fade-in"
+                            placeholder="Nomes dos acompanhantes (separados por vírgula)"
+                            rows="3"
+                            onChange={(e) => setAcompanhantes(e.target.value)}
+                        />
+                    )}
+
+                    <button className="w-full bg-[#B22222] hover:bg-red-700 text-white py-4 rounded-full font-black text-sm tracking-[0.2em] shadow-lg transform active:scale-95 transition-all">
+                        CONFIRMAR AGORA
+                    </button>
+                </form>
+            ) : status === 'sucesso' && (
+                <div className="text-center py-6 animate-bounce-in">
+                    <CheckCircle className="mx-auto text-green-500 mb-4" size={50} />
+                    <h3 className="text-2xl font-black text-[#B22222]">PRESENÇA CONFIRMADA!</h3>
+                    <p className="text-gray-500 mt-2">Obrigado! Mal podemos esperar por este dia. ❤️</p>
+                </div>
+            )}
+        </div>
+      </div>
+
+      {/* 4. CHUVA DE CORAÇÕES (O SEU SVG) */}
+      {hearts.map(h => (
+        <div key={h.id} className="fixed bottom-[-50px] animate-float-up z-[60] pointer-events-none" style={{ left: `${h.left}%`, animationDelay: `${h.delay}s` }}>
+            <svg width={h.size} height={h.size} viewBox="0 0 24 24" fill="#B22222">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+        </div>
+      ))}
+
+      {/* 5. ÍCONE DE ADMINISTRAÇÃO (CLIENTE) */}
+      <button 
+        onClick={abrirAdmin}
+        className="fixed bottom-6 right-6 p-3 bg-white/50 hover:bg-white rounded-full shadow-lg text-[#B22222]/40 hover:text-[#B22222] transition-all z-50 border border-white"
+      >
+        <List size={20} />
+      </button>
+
+      {/* 6. MODAL DA LISTA (ADMIN) */}
+      {showAdmin && (
+        <div className="fixed inset-0 z-[200] bg-white p-6 overflow-y-auto animate-fade-in">
+            <div className="flex justify-between items-center border-b pb-4 mb-6">
+                <h2 className="text-xl font-black text-[#B22222]">LISTA DE CONVIDADOS</h2>
+                <button onClick={() => setShowAdmin(false)} className="p-2"><X /></button>
+            </div>
+            
+            <div className="mb-6 p-4 bg-[#B22222]/5 rounded-2xl border border-[#B22222]/10">
+                <p className="text-xs uppercase tracking-widest text-gray-400">Total de Pessoas</p>
+                <p className="text-3xl font-black text-[#B22222]">
+                    {lista.reduce((acc, curr) => {
+                        const acomp = curr.tipo === 'Grupo' ? (curr.acompanhantes?.split(',').filter(x => x.trim()).length || 0) : 0;
+                        return acc + 1 + acomp;
+                    }, 0)}
+                </p>
+            </div>
+
+            <div className="space-y-3">
+                {lista.map(guest => (
+                    <div key={guest.id} className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                        <div className="flex justify-between items-start">
+                            <div>
+                                <p className="text-[10px] font-bold text-[#B22222] uppercase tracking-tighter mb-1">{guest.tipo}</p>
+                                <p className="font-bold text-gray-800">{guest.nome}</p>
+                            </div>
+                            <p className="text-[10px] text-gray-400">{guest.data?.toDate().toLocaleDateString()}</p>
+                        </div>
+                        {guest.acompanhantes && (
+                            <p className="text-xs text-gray-500 mt-2 border-t pt-2 italic">Acomp: {guest.acompanhantes}</p>
+                        )}
+                    </div>
+                ))}
+            </div>
+        </div>
+      )}
+
+      {/* ESTILOS DE ANIMAÇÃO CSS */}
+      <style>{`
+        @keyframes reveal { from { opacity:0; letter-spacing: 1em; } to { opacity:1; letter-spacing: 0.2em; } }
+        @keyframes expand { from { width: 0; } to { width: 80px; } }
+        @keyframes jump-slow { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px) rotate(3deg); } }
+        @keyframes jump-fast { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-25px) rotate(-3deg); } }
+        @keyframes float { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-10px) rotate(5deg); } }
+        @keyframes float-up { 
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; } 
+            100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; } 
+        }
+        @keyframes fadeOut { 0% { opacity: 1; } 90% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes bounceIn { 0% { transform: scale(0.3); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        
+        .animate-reveal { animation: reveal 2.5s ease-out forwards; }
+        .animate-expand { animation: expand 1.5s 0.8s ease-in-out forwards; }
+        .animate-fade-in-slow { animation: fadeIn 2s 1.5s ease-in forwards; opacity: 0; }
+        .animate-fade-in { animation: fadeIn 0.5s ease-in forwards; }
+        .animate-fade-out { animation: fadeOut 3.5s forwards; }
+        .animate-jump-slow { animation: jump-slow 4s infinite ease-in-out; }
+        .animate-jump-fast { animation: jump-fast 3s infinite ease-in-out; }
+        .animate-float { animation: float 3.5s infinite ease-in-out; }
+        .animate-float-up { animation: float-up 5s ease-in forwards; }
+        .animate-bounce-in { animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+      `}</style>
     </div>
-
-    <script>
-        const form = document.getElementById('invite-form');
-        
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const nome = document.getElementById('nome').value;
-            
-            // 1. DISPARAR ANIMAÇÃO
-            lancarCoracoes();
-
-            // 2. CONFIGURAÇÕES DO GOOGLE FORMS
-            const formURL = 'https://docs.google.com/forms/d/e/1FAIpQLSdteJALXJg2pIbfhy6NbtLLlM1R3MUa8dTniaJDsdTacB4a9A/formResponse';
-            const entryID = 'entry.18326439798'; 
-
-            const formData = new FormData();
-            formData.append(entryID, nome);
-
-            // Envio silencioso
-            fetch(formURL, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: formData
-            }).then(() => {
-                form.style.display = 'none';
-                document.getElementById('mensagem-sucesso').style.display = 'block';
-            }).catch(error => {
-                console.error('Erro no envio:', error);
-                alert('Ocorreu um erro ao confirmar. Tente novamente.');
-            });
-        });
-
-        function lancarCoracoes() {
-            const duration = 4 * 1000;
-            const end = Date.now() + duration;
-
-            (function frame() {
-              // Lançamento de corações pelas laterais (estilo live)
-              confetti({
-                particleCount: 2,
-                angle: 60,
-                spread: 55,
-                origin: { x: 0, y: 0.8 },
-                colors: ['#ff4d6d', '#ff758f', '#ffb3c1']
-              });
-              confetti({
-                particleCount: 2,
-                angle: 120,
-                spread: 55,
-                origin: { x: 1, y: 0.8 },
-                colors: ['#ff4d6d', '#ff758f', '#ffb3c1']
-              });
-
-              if (Date.now() < end) {
-                requestAnimationFrame(frame);
-              }
-            }());
-        }
-    </script>
-</body>
-</html>
+  );
+}
