@@ -17,7 +17,7 @@
         @keyframes reveal { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
         @keyframes jump-left { 0%, 100% { transform: rotate(-8deg) translateY(0); } 50% { transform: rotate(-10deg) translateY(-15px); } }
         @keyframes jump-right { 0%, 100% { transform: rotate(8deg) translateY(0); } 50% { transform: rotate(10deg) translateY(-20px); } }
-        @keyframes float-cake { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, -10px); } }
+        @keyframes float-cake { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-8px); } }
         @keyframes fadeOut { 0% { opacity: 1; } 90% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
         @keyframes bounceIn { 0% { transform: scale(0.3); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
         @keyframes float-up { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; } }
@@ -32,9 +32,9 @@
 
         .hidden-view { display: none !important; }
         
-        /* HIERARQUIA DE CAMADAS AJUSTADA */
+        /* HIERARQUIA DE CAMADAS */
         .layer-base-moldura { z-index: 10; }
-        .layer-numbers { z-index: 12; } /* À frente da moldura para não sumir, atrás da Deborah */
+        .layer-numbers { z-index: 12; }
         .layer-title { z-index: 15; }
         .layer-person { z-index: 20; }
         .layer-front-cake { z-index: 30; }
@@ -67,11 +67,11 @@
             <!-- MOLDURA (Layer 10) -->
             <img src="moldura.jpg" class="absolute inset-0 w-full h-full object-cover layer-base-moldura" alt="Fundo">
             
-            <!-- NÚMEROS (Layer 12) - 20% menores e mais baixos -->
+            <!-- NÚMEROS (Layer 12) -->
             <img src="num2.png" class="absolute top-[35%] left-[2%] w-44 md:w-52 animate-jump-2 opacity-90 layer-numbers" alt="2">
             <img src="num6.png" class="absolute top-[33%] right-[2%] w-44 md:w-52 animate-jump-6 opacity-90 layer-numbers" alt="6">
 
-            <!-- TÍTULO (Layer 15) - Espaço reservado no topo -->
+            <!-- TÍTULO (Layer 15) -->
             <div class="absolute top-[14%] inset-x-0 text-center layer-title px-4 pointer-events-none">
                 <h2 class="text-[#B22222] font-serif-title text-4xl md:text-5xl italic leading-tight drop-shadow-sm">
                     Deborah's Birthday
@@ -80,13 +80,14 @@
 
             <!-- ANIVERSARIANTE (Layer 20) -->
             <div class="absolute inset-0 flex items-center justify-center layer-person pointer-events-none">
-                <div class="relative mt-48 photo-mask">
+                <div class="relative mt-40 photo-mask">
                     <img src="deborah.png" class="w-32 md:w-40 drop-shadow-[0_20px_40px_rgba(0,0,0,0.4)]" alt="Deborah">
                 </div>
             </div>
 
-            <!-- BOLO (Layer 30) - Centralizado na base -->
-            <img src="bolo.png" class="absolute bottom-4 left-1/2 -translate-x-1/2 w-52 md:w-60 drop-shadow-2xl animate-float-cake layer-front-cake" alt="Bolo">
+            <!-- BOLO (Layer 30) - AJUSTADO PARA A BASE -->
+            <!-- Usei bottom-[-2rem] para o empurrar mais para baixo e aumentei a largura para refletir a nova imagem -->
+            <img src="bolo.png" class="absolute bottom-[-2rem] left-1/2 -translate-x-1/2 w-64 md:w-72 drop-shadow-2xl animate-float-cake layer-front-cake" alt="Bolo">
         </div>
 
         <!-- 3. CARD DE INFORMAÇÕES E RSVP -->
