@@ -4,132 +4,157 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Deborah Ramos - 26 Anos</title>
-    <!-- Tailwind CSS para Estilo -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Cormorant Garamond & Montserrat -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;700&display=swap');
-        
-        body { font-family: 'Montserrat', sans-serif; background-color: #FDF5E6; overflow-x: hidden; }
-        .font-serif-title { font-family: 'Playfair Display', serif; }
+        body { font-family: 'Montserrat', sans-serif; background-color: #FDF5E6; overflow-x: hidden; margin: 0; }
+        .font-serif-title { font-family: 'Cormorant Garamond', serif; }
 
         /* ANIMAÇÕES */
-        @keyframes reveal { from { opacity:0; letter-spacing: 1em; } to { opacity:1; letter-spacing: 0.2em; } }
-        @keyframes expand { from { width: 0; } to { width: 80px; } }
-        @keyframes jump-slow { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px) rotate(3deg); } }
-        @keyframes jump-fast { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-25px) rotate(-3deg); } }
-        @keyframes float { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-10px) rotate(5deg); } }
+        @keyframes reveal { from { opacity:0; letter-spacing: 0.5em; } to { opacity:1; letter-spacing: 0.1em; } }
+        @keyframes jump-slow { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px) rotate(2deg); } }
+        @keyframes jump-fast { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-18px) rotate(-2deg); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
         @keyframes float-up { 
             0% { transform: translateY(0) rotate(0deg); opacity: 1; } 
             100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; } 
         }
         @keyframes fadeOut { 0% { opacity: 1; } 90% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
         @keyframes bounceIn { 0% { transform: scale(0.3); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes scrollHint { 0%, 100% { transform: translateY(0); opacity: 0.5; } 50% { transform: translateY(10px); opacity: 1; } }
 
-        .animate-reveal { animation: reveal 2.5s ease-out forwards; }
-        .animate-expand { animation: expand 1.5s 0.8s ease-in-out forwards; display: block; margin: 0 auto; height: 1px; background: #B22222; width: 0; }
+        .animate-reveal { animation: reveal 2s ease-out forwards; }
         .animate-fade-out { animation: fadeOut 3.5s forwards; }
         .animate-jump-slow { animation: jump-slow 4s infinite ease-in-out; }
         .animate-jump-fast { animation: jump-fast 3s infinite ease-in-out; }
         .animate-float { animation: float 3.5s infinite ease-in-out; }
         .animate-float-up { animation: float-up 5s ease-in forwards; position: fixed; bottom: -50px; z-index: 60; pointer-events: none; }
         .animate-bounce-in { animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+        .animate-scroll { animation: scrollHint 2s infinite; }
 
-        .scrapbook-container { perspective: 1000px; }
         .hidden-view { display: none !important; }
+        
+        /* Efeito de recorte para esconder as pernas */
+        .photo-crop {
+            mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4">
+<body class="min-h-screen flex flex-col items-center p-4 pt-10">
 
     <!-- 1. ECRÃ DE ENTRADA -->
     <div id="intro-screen" class="fixed inset-0 z-[100] bg-[#FDF5E6] flex flex-col items-center justify-center animate-fade-out">
-        <h1 class="text-4xl md:text-5xl text-[#B22222] font-serif-title font-light animate-reveal">
+        <h1 class="text-4xl md:text-6xl text-[#B22222] font-serif-title font-light animate-reveal text-center px-4">
             DEBORAH RAMOS
         </h1>
-        <div class="animate-expand"></div>
-        <p class="mt-6 tracking-[0.5em] text-[#B22222]/50 text-xs uppercase">
+        <div class="h-[1px] bg-[#B22222] mt-4 w-16 md:w-24"></div>
+        <p class="mt-4 tracking-[0.4em] text-[#B22222]/50 text-[10px] md:text-xs uppercase">
             A celebrar 26 anos
         </p>
     </div>
 
-    <!-- 2. COMPOSIÇÃO VISUAL (SCRAPBOOK) -->
-    <div id="main-content" class="relative w-full max-w-sm transition-all duration-1000 opacity-0 translate-y-4">
+    <!-- 2. COMPOSIÇÃO VISUAL (ESTILO SCRAPBOOK) -->
+    <div id="main-content" class="relative w-full max-w-sm transition-all duration-1000 opacity-0 translate-y-4 scale-95 mb-20">
         
-        <div class="relative shadow-2xl rounded-2xl overflow-hidden border-[12px] border-white bg-white">
+        <div class="relative shadow-2xl rounded-3xl overflow-hidden border-[12px] border-white bg-white">
             <!-- Moldura de Fundo -->
-            <img src="moldura.jpg" class="w-full h-auto block" alt="Fundo">
+            <img src="moldura.jpg" class="w-full h-auto block bg-red-50" alt="Fundo" onerror="this.style.display='none'">
             
-            <!-- Números Saltitantes -->
-            <img src="num2.png" class="absolute top-8 left-4 w-24 md:w-28 animate-jump-slow z-10" alt="2">
-            <img src="num6.png" class="absolute top-6 right-4 w-24 md:w-28 animate-jump-fast z-10" alt="6">
+            <!-- Taça (Localizada em cima agora) -->
+            <img src="taca.png" class="absolute top-6 right-6 w-14 md:w-16 z-30 drop-shadow-lg animate-float" alt="Taça" onerror="this.style.display='none'">
 
-            <!-- Aniversariante -->
-            <div class="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
-                <div class="relative mt-20">
-                    <img src="deborah.png" class="w-56 md:w-64 drop-shadow-[0_20px_20px_rgba(0,0,0,0.3)]" alt="Deborah">
-                    <!-- Chapéu -->
-                    <img src="chapeu.png" class="absolute -top-10 left-1/2 -translate-x-1/2 w-16 md:w-20 rotate-6 animate-pulse" alt="Chapéu">
+            <!-- Números Saltitantes (Centralizados e Atrás) -->
+            <div class="absolute inset-0 flex justify-center items-start pt-12 z-10 pointer-events-none">
+                <div class="relative w-full h-40">
+                    <img src="num2.png" class="absolute left-1/2 -translate-x-[90%] w-24 md:w-28 animate-jump-slow" alt="2" onerror="this.style.display='none'">
+                    <img src="num6.png" class="absolute left-1/2 -translate-x-[10%] w-24 md:w-28 animate-jump-fast" alt="6" onerror="this.style.display='none'">
                 </div>
             </div>
 
-            <!-- Taça -->
-            <img src="taca.png" class="absolute bottom-4 right-4 w-16 md:w-20 z-30 drop-shadow-lg animate-float" alt="Taça">
+            <!-- Aniversariante e Chapéu -->
+            <div class="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
+                <div class="relative mt-24">
+                    <!-- Foto com recorte nas pernas -->
+                    <div class="photo-crop overflow-hidden h-[320px] md:h-[380px]">
+                        <img src="deborah.png" class="w-56 md:w-64 drop-shadow-[0_15px_15px_rgba(0,0,0,0.3)] object-top" alt="Deborah" onerror="this.parentElement.innerHTML='<div class=\'w-48 h-64 bg-gray-100 flex items-center justify-center text-xs text-gray-400\'>Foto</div>'">
+                    </div>
+                    <!-- Chapéu -->
+                    <img src="chapeu.png" class="absolute -top-6 left-1/2 -translate-x-1/2 w-14 md:w-18 rotate-6 animate-pulse" alt="Chapéu" onerror="this.style.display='none'">
+                </div>
+            </div>
+        </div>
+
+        <!-- INDICADOR DE SCROLL -->
+        <div class="flex flex-col items-center mt-6 animate-scroll text-[#B22222]/40">
+            <span class="text-[10px] uppercase tracking-widest mb-1">Confirmar</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
         </div>
 
         <!-- 3. FORMULÁRIO RSVP -->
-        <div class="w-full mt-8 bg-white/80 backdrop-blur-md p-6 rounded-[2rem] shadow-xl border border-red-50/50 relative z-40">
+        <div class="w-full mt-6 bg-white/95 backdrop-blur-sm p-8 rounded-[2.5rem] shadow-2xl border border-red-50 relative z-40">
             <div id="rsvp-view">
-                <div class="text-center mb-6">
-                    <h3 class="text-[#B22222] font-black text-xl uppercase tracking-widest font-serif-title">Confirmar Presença</h3>
-                    <p class="text-gray-500 text-sm mt-1">Deborah aguarda por si!</p>
+                <div class="text-center mb-8">
+                    <h3 class="text-[#B22222] font-bold text-2xl uppercase tracking-[0.15em] font-serif-title">Confirmar Presença</h3>
                 </div>
 
-                <form id="rsvp-form" class="space-y-4">
-                    <input 
-                        type="text" id="input-nome" placeholder="Escreva o seu nome" required
-                        class="w-full p-4 bg-red-50/30 border-b-2 border-red-100 focus:border-[#B22222] outline-none text-center text-lg rounded-xl"
-                    >
+                <form id="rsvp-form" class="space-y-6">
+                    <div class="relative">
+                        <input 
+                            type="text" id="input-nome" placeholder="Digite seu nome" required
+                            class="w-full p-4 bg-transparent border-b border-red-200 focus:border-[#B22222] outline-none text-center text-lg font-light transition-all"
+                        >
+                    </div>
 
-                    <div class="flex gap-2">
-                        <button type="button" id="btn-solo" onclick="setTipo('Individual')" class="flex-1 p-3 rounded-full border-2 border-[#B22222] bg-[#B22222] text-white font-bold text-xs transition-all">
+                    <div class="flex gap-3">
+                        <button type="button" id="btn-solo" onclick="setTipo('Individual')" class="flex-1 py-3 rounded-full border border-[#B22222] bg-[#B22222] text-white font-serif-title font-bold text-xs tracking-widest transition-all">
                             INDIVIDUAL
                         </button>
-                        <button type="button" id="btn-grupo" onclick="setTipo('Grupo')" class="flex-1 p-3 rounded-full border-2 border-red-50 text-[#B22222] font-bold text-xs transition-all">
+                        <button type="button" id="btn-grupo" onclick="setTipo('Grupo')" class="flex-1 py-3 rounded-full border border-red-100 text-[#B22222] font-serif-title font-bold text-xs tracking-widest transition-all">
                             + FAMÍLIA
                         </button>
                     </div>
 
                     <textarea 
                         id="input-acompanhantes" rows="2" placeholder="Nomes dos acompanhantes..."
-                        class="hidden w-full p-4 bg-red-50/30 border border-red-100 rounded-2xl text-sm focus:border-red-400 outline-none"
+                        class="hidden w-full p-4 bg-red-50/20 border border-red-50 rounded-2xl text-sm focus:border-red-300 outline-none"
                     ></textarea>
 
-                    <button type="submit" id="btn-submit" class="w-full bg-[#B22222] text-white py-4 rounded-full font-black text-sm tracking-[0.2em] shadow-lg active:scale-95 transition-all">
-                        CONFIRMAR AGORA
+                    <button type="submit" id="btn-submit" class="w-full bg-[#B22222] text-white py-5 rounded-full font-serif-title font-bold text-sm tracking-[0.3em] shadow-xl active:scale-95 transition-all uppercase">
+                        Confirmar Agora
                     </button>
                 </form>
             </div>
 
-            <div id="success-view" class="hidden-view text-center py-6 animate-bounce-in">
-                <div class="text-5xl mb-4">✨</div>
-                <h3 class="text-2xl font-black text-[#B22222] font-serif-title">CONFIRMADO!</h3>
-                <p class="text-gray-500 mt-2">Obrigado! Mal podemos esperar por este dia. ❤️</p>
+            <div id="success-view" class="hidden-view text-center py-8 animate-bounce-in">
+                <!-- Coração SVG no lugar da estrela -->
+                <div class="flex justify-center mb-4">
+                    <svg width="60" height="60" viewBox="0 0 24 24" fill="#B22222">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-bold text-[#B22222] font-serif-title uppercase tracking-widest">Confirmado!</h3>
+                <p class="text-gray-500 text-sm mt-2">Mal podemos esperar por este dia. ❤️</p>
             </div>
         </div>
     </div>
 
     <!-- BOTÃO ADMIN -->
-    <button onclick="acessoAdmin()" class="fixed bottom-6 right-6 p-3 bg-white/50 rounded-full shadow-lg text-[#B22222]/40 z-50">
+    <button onclick="acessoAdmin()" class="fixed bottom-6 right-6 p-3 bg-white/40 rounded-full shadow-sm text-[#B22222]/30 z-50 hover:bg-white transition-all">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><circle cx="3" cy="6" r="1"></circle><circle cx="3" cy="12" r="1"></circle><circle cx="3" cy="18" r="1"></circle></svg>
     </button>
 
     <!-- MODAL ADMIN -->
     <div id="admin-modal" class="hidden-view fixed inset-0 z-[200] bg-white p-6 overflow-y-auto">
         <div class="flex justify-between items-center border-b pb-4 mb-6">
-            <h2 class="text-xl font-black text-[#B22222]">LISTA DE CONVIDADOS</h2>
+            <h2 class="text-xl font-bold text-[#B22222] font-serif-title">LISTA DE CONVIDADOS</h2>
             <button onclick="document.getElementById('admin-modal').classList.add('hidden-view')" class="text-3xl">&times;</button>
         </div>
-        <div id="admin-stats" class="mb-6 p-4 bg-[#B22222]/5 rounded-2xl border border-[#B22222]/10 text-3xl font-black text-[#B22222]">
-            Total: 0
+        <div id="admin-stats" class="mb-6 p-6 bg-red-50 rounded-2xl text-4xl font-bold text-[#B22222] font-serif-title">
+            0
         </div>
         <div id="list-container" class="space-y-3"></div>
     </div>
@@ -155,21 +180,27 @@
         const appId = "cvt-debora-ramos";
         let currentType = 'Individual';
 
-        // Mostrar conteúdo após intro
         setTimeout(() => {
             const main = document.getElementById('main-content');
-            main.classList.remove('opacity-0', 'translate-y-4');
+            main.classList.remove('opacity-0', 'translate-y-4', 'scale-95');
+            main.classList.add('opacity-100', 'translate-y-0', 'scale-100');
         }, 3000);
 
-        // Seleção de tipo
         window.setTipo = (t) => {
             currentType = t;
-            document.getElementById('btn-solo').className = t === 'Individual' ? 'flex-1 p-3 rounded-full border-2 border-[#B22222] bg-[#B22222] text-white font-bold text-xs' : 'flex-1 p-3 rounded-full border-2 border-red-50 text-[#B22222] font-bold text-xs';
-            document.getElementById('btn-grupo').className = t === 'Grupo' ? 'flex-1 p-3 rounded-full border-2 border-[#B22222] bg-[#B22222] text-white font-bold text-xs' : 'flex-1 p-3 rounded-full border-2 border-red-50 text-[#B22222] font-bold text-xs';
+            const btnS = document.getElementById('btn-solo');
+            const btnG = document.getElementById('btn-grupo');
+            
+            if(t === 'Individual') {
+                btnS.className = "flex-1 py-3 rounded-full border border-[#B22222] bg-[#B22222] text-white font-serif-title font-bold text-xs tracking-widest";
+                btnG.className = "flex-1 py-3 rounded-full border border-red-100 text-[#B22222] font-serif-title font-bold text-xs tracking-widest";
+            } else {
+                btnG.className = "flex-1 py-3 rounded-full border border-[#B22222] bg-[#B22222] text-white font-serif-title font-bold text-xs tracking-widest";
+                btnS.className = "flex-1 py-3 rounded-full border border-red-100 text-[#B22222] font-serif-title font-bold text-xs tracking-widest";
+            }
             document.getElementById('input-acompanhantes').classList.toggle('hidden', t === 'Individual');
         };
 
-        // Envio RSVP
         document.getElementById('rsvp-form').onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn-submit');
@@ -189,19 +220,19 @@
                 document.getElementById('success-view').classList.remove('hidden-view');
                 lancarCoracoes();
             } catch (err) {
-                alert("Erro ao gravar. Verifique a internet.");
+                alert("Erro de conexão. Tente novamente.");
                 btn.disabled = false;
-                btn.innerText = "CONFIRMAR AGORA";
+                btn.innerText = "Confirmar Agora";
             }
         };
 
         function lancarCoracoes() {
-            for(let i=0; i<25; i++) {
+            for(let i=0; i<30; i++) {
                 const heart = document.createElement('div');
                 heart.className = 'animate-float-up';
                 heart.style.left = Math.random() * 100 + '%';
-                heart.style.animationDelay = Math.random() * 2 + 's';
-                heart.innerHTML = `<svg width="${20 + Math.random()*30}" height="30" viewBox="0 0 24 24" fill="#B22222"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
+                heart.style.animationDelay = Math.random() * 3 + 's';
+                heart.innerHTML = `<svg width="${15 + Math.random()*25}" height="30" viewBox="0 0 24 24" fill="#B22222"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
                 document.body.appendChild(heart);
             }
         }
@@ -226,15 +257,15 @@
                         totalPessoas += count;
 
                         const item = document.createElement('div');
-                        item.className = "p-4 bg-gray-50 rounded-2xl border border-gray-100";
+                        item.className = "p-4 bg-gray-50 rounded-2xl border border-gray-100 shadow-sm";
                         item.innerHTML = `
-                            <p class="text-[10px] font-bold text-[#B22222] uppercase tracking-tighter">${d.tipo}</p>
-                            <p class="font-bold text-gray-800">${d.nome}</p>
-                            ${d.acompanhantes ? `<p class="text-xs text-gray-500 mt-1 italic border-t pt-1">+ ${d.acompanhantes}</p>` : ''}
+                            <p class="text-[9px] font-bold text-[#B22222] uppercase tracking-wider">${d.tipo}</p>
+                            <p class="font-bold text-gray-800 text-base">${d.nome}</p>
+                            ${d.acompanhantes ? `<p class="text-xs text-gray-500 mt-2 italic border-t pt-2">+ ${d.acompanhantes}</p>` : ''}
                         `;
                         container.appendChild(item);
                     });
-                    stats.innerText = "Total: " + totalPessoas;
+                    stats.innerText = totalPessoas;
                 });
             }
         };
