@@ -20,7 +20,7 @@
         }
         .font-serif-title { font-family: 'Cormorant Garamond', serif; }
 
-        /* Textura arenosa para o card */
+        /* Textura arenosa para o card (onde a moldura for transparente) */
         .sandy-texture {
             background-color: #fffcfc;
             background-image: url("https://www.transparenttextures.com/patterns/sandpaper.png");
@@ -43,17 +43,17 @@
 
         .hidden-view { display: none !important; }
         
-        /* HIERARQUIA DE CAMADAS (Z-INDEX) ATUALIZADA */
-        .layer-bg-moldura { z-index: 1; }    /* 1. Moldura como plano de fundo */
-        .layer-numbers { z-index: 5; }      /* 2. Números à frente da moldura */
+        /* HIERARQUIA DE CAMADAS (Z-INDEX) */
+        .layer-bg-moldura { z-index: 1; }    /* 1. Moldura (Plano de Fundo) */
+        .layer-numbers { z-index: 5; }      /* 2. Números */
         .layer-title { z-index: 10; }       /* 3. Título */
         .layer-person { z-index: 15; }      /* 4. Deborah */
-        .layer-front-cake { z-index: 20; }   /* 5. Bolo na frente de todos */
+        .layer-front-cake { z-index: 20; }   /* 5. Bolo */
         .layer-ui { z-index: 50; }
 
         .photo-mask {
-            mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
-            -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+            mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
         }
     </style>
 </head>
@@ -73,33 +73,33 @@
     <!-- 2. COMPOSIÇÃO VISUAL (SCRAPBOOK) -->
     <div id="main-content" class="relative w-full max-w-sm transition-all duration-1000 opacity-0 translate-y-6 scale-95 mt-4 mb-10">
         
-        <!-- Frame Principal com Textura Arenosa -->
+        <!-- Contentor do Card com Textura Arenosa -->
         <div class="relative shadow-2xl rounded-[2.5rem] overflow-hidden border-[10px] border-white sandy-texture aspect-[3/5] scrapbook-container">
             
-            <!-- MOLDURA (Layer 1) - Agora como fundo sólido -->
+            <!-- 1. MOLDURA PNG (Layer 1 - Plano de Fundo) -->
             <img src="moldura.png" class="absolute inset-0 w-full h-full object-fill layer-bg-moldura" alt="Moldura">
             
-            <!-- NÚMEROS (Layer 5) - Saltam sobre a moldura -->
-            <img src="num2.png" class="absolute top-[38%] left-[2%] w-44 md:w-52 animate-jump-2 opacity-95 layer-numbers" alt="2">
-            <img src="num6.png" class="absolute top-[36%] right-[2%] w-44 md:w-52 animate-jump-6 opacity-95 layer-numbers" alt="6">
+            <!-- 2. NÚMEROS (Layer 5) - Saltam sobre a moldura -->
+            <img src="num2.png" class="absolute top-[38%] left-[2%] w-40 md:w-48 animate-jump-2 opacity-95 layer-numbers" alt="2">
+            <img src="num6.png" class="absolute top-[36%] right-[2%] w-40 md:w-48 animate-jump-6 opacity-95 layer-numbers" alt="6">
 
-            <!-- TÍTULO (Layer 10) -->
-            <div class="absolute top-[18%] inset-x-0 text-center layer-title px-4 pointer-events-none">
+            <!-- 3. TÍTULO (Layer 10) - Posicionado mais abaixo para dar espaço -->
+            <div class="absolute top-[20%] inset-x-0 text-center layer-title px-4 pointer-events-none">
                 <h2 class="text-[#B22222] font-serif-title text-4xl md:text-5xl italic leading-tight drop-shadow-sm">
                     Deborah's Birthday
                 </h2>
             </div>
 
-            <!-- ANIVERSARIANTE (Layer 15) -->
+            <!-- 4. ANIVERSARIANTE (Layer 15) -->
             <div class="absolute inset-0 flex items-center justify-center layer-person pointer-events-none">
                 <div class="relative mt-44 photo-mask">
                     <img src="deborah.png" class="w-32 md:w-40 drop-shadow-[0_20px_40px_rgba(0,0,0,0.4)]" alt="Deborah">
                 </div>
             </div>
 
-            <!-- BOLO (Layer 20) - Estático e menor (5/7 da altura anterior) -->
-            <!-- Reduzido de w-64 para w-44 para manter a proporção de 5/7 no tamanho visual -->
-            <img src="bolo.png" class="absolute bottom-[-1rem] left-1/2 -translate-x-1/2 w-44 md:w-52 drop-shadow-2xl layer-front-cake" alt="Bolo">
+            <!-- 5. BOLO (Layer 20) - Estático e menor (5/7 da escala anterior) -->
+            <!-- Reduzi a largura para w-32/w-40 para dar mais foco à Deborah -->
+            <img src="bolo.png" class="absolute bottom-[-0.5rem] left-1/2 -translate-x-1/2 w-32 md:w-40 drop-shadow-2xl layer-front-cake" alt="Bolo">
         </div>
 
         <!-- 3. CARD DE INFORMAÇÕES E RSVP -->
