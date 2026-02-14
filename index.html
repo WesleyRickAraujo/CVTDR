@@ -37,16 +37,16 @@
         .z-front   { z-index: 50; }
         .z-ui      { z-index: 100; }
 
-        /* Animações */
+        /* Animações Otimizadas (Mais Rápidas) */
         @keyframes revealTitle { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
         @keyframes jump2 { 0%, 100% { transform: rotate(-8deg) translateY(0); } 50% { transform: rotate(-10deg) translateY(-12px); } }
         @keyframes jump6 { 0%, 100% { transform: rotate(8deg) translateY(0); } 50% { transform: rotate(10deg) translateY(-18px); } }
-        @keyframes introOut { 0% { opacity: 1; } 90% { opacity: 1; } 100% { opacity: 0; visibility: hidden; pointer-events: none; } }
+        @keyframes introOut { 0% { opacity: 1; } 100% { opacity: 0; visibility: hidden; pointer-events: none; } }
         @keyframes floatUp { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; } }
         @keyframes fadeOutSuccess { from { opacity: 1; } to { opacity: 0; } }
 
-        .anim-reveal { animation: revealTitle 2s ease-out forwards; }
-        .anim-intro-exit { animation: introOut 3.5s forwards; }
+        .anim-reveal { animation: revealTitle 1.5s ease-out forwards; }
+        .anim-intro-exit { animation: introOut 0.8s 2.2s forwards; } /* Inicia o fade out mais cedo */
         .anim-jump-2 { animation: jump2 6s infinite ease-in-out; }
         .anim-jump-6 { animation: jump6 5s infinite ease-in-out; }
         .anim-heart-rise { animation: floatUp 5s ease-in forwards; position: fixed; bottom: -50px; z-index: 200; pointer-events: none; }
@@ -70,7 +70,7 @@
 </head>
 <body class="min-h-screen flex flex-col items-center p-4">
 
-    <!-- TELA DE INTRODUÇÃO -->
+    <!-- TELA DE INTRODUÇÃO (TEMPO REDUZIDO) -->
     <aside id="intro-screen" class="fixed inset-0 z-[500] bg-[#FDF5E6] flex flex-col items-center justify-center anim-intro-exit">
         <h1 class="text-5xl md:text-7xl text-[#B22222] font-serif-title font-medium italic anim-reveal text-center px-4">
             Deborah Ramos
@@ -82,7 +82,7 @@
     </aside>
 
     <!-- COMPOSIÇÃO SCRAPBOOK -->
-    <main id="app-container" class="relative w-full max-w-sm transition-all duration-1000 opacity-0 translate-y-6 scale-95 mt-4 mb-10">
+    <main id="app-container" class="relative w-full max-w-sm transition-all duration-700 opacity-0 translate-y-6 scale-95 mt-4 mb-10">
         <div class="relative shadow-2xl rounded-[2.5rem] overflow-hidden border-[10px] border-white bg-white aspect-[3/5]">
             <img src="moldura.jpg" class="absolute inset-0 w-full h-full object-fill z-moldura pointer-events-none" alt="Moldura">
             <img src="num2.png" class="absolute top-[38%] left-[2%] w-36 md:w-44 anim-jump-2 opacity-95 z-numeros" alt="2">
@@ -100,7 +100,7 @@
             <img src="bolo.png" class="absolute bottom-[0.5rem] left-1/2 -translate-x-1/2 w-48 md:w-60 drop-shadow-2xl z-front" alt="Bolo">
         </div>
 
-        <!-- SESSÃO RSVP -->
+        <!-- SESSÃO RSVP (INVERTIDA) -->
         <section class="w-full mt-8 bg-[#B22222] p-8 md:p-10 rounded-[3rem] shadow-2xl border border-white/10 relative z-ui text-white">
             <div class="text-center mb-8 pb-6 border-b border-white/20">
                 <p class="font-serif-title text-3xl italic tracking-wide">Di Fiori</p>
@@ -116,7 +116,7 @@
                     <h2 class="text-white font-bold text-2xl uppercase tracking-[0.2em] font-serif-title italic">Confirmação</h2>
                 </div>
                 <form id="rsvp-form" class="space-y-5">
-                    <input type="text" id="guest-name" placeholder="Escreva o seu nome completo" required class="w-full p-4 rsvp-input-inverted text-center text-lg font-light rounded-2xl">
+                    <input type="text" id="guest-name" placeholder="Digite seu nome" required class="w-full p-4 rsvp-input-inverted text-center text-lg font-light rounded-2xl">
                     <div class="flex gap-3">
                         <button type="button" id="toggle-solo" class="flex-1 py-3.5 rounded-full border border-white/20 font-serif-title font-bold text-xs tracking-[0.1em] transition-all bg-white text-[#B22222] shadow-xl">INDIVIDUAL</button>
                         <button type="button" id="toggle-group" class="flex-1 py-3.5 rounded-full border border-white/20 font-serif-title font-bold text-xs tracking-[0.1em] transition-all text-white hover:bg-white/10">+ FAMÍLIA</button>
@@ -126,12 +126,14 @@
                 </form>
             </div>
 
+            <!-- MENSAGEM SUCESSO TEMPORÁRIA -->
             <div id="success-state" class="hidden-view text-center py-10 transition-all duration-500">
                 <div class="flex justify-center mb-6"><svg width="70" height="70" viewBox="0 0 24 24" fill="white"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
                 <h3 class="text-3xl font-bold text-white font-serif-title italic">Confirmado!</h3>
                 <p class="text-white/70 text-sm mt-4 font-light italic text-center">Obrigado! Mal podemos esperar. ❤️</p>
             </div>
 
+            <!-- RODAPÉ FIXO LOCALIZAÇÃO -->
             <footer class="mt-10 pt-8 border-t border-white/20 text-center">
                 <p class="text-[10px] text-white/50 uppercase font-bold tracking-[0.2em] mb-3">Localização</p>
                 <p class="text-white/80 text-[11px] leading-relaxed mb-6 px-4 font-light italic">Av. Prof. Nilton Lins, 1560A - Parque das Laranjeiras, Manaus - AM</p>
@@ -142,7 +144,7 @@
         </section>
     </main>
 
-    <!-- ADMIN PANEL TRIGGER -->
+    <!-- ADMIN PANEL -->
     <button id="master-panel-btn" class="fixed bottom-6 right-6 p-4 bg-white/10 rounded-full text-white/5 z-[150]">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><circle cx="3" cy="6" r="1"></circle><circle cx="3" cy="12" r="1"></circle><circle cx="3" cy="18" r="1"></circle></svg>
     </button>
@@ -155,10 +157,9 @@
         
         <div class="flex flex-col items-center mb-8">
             <div id="guest-count" class="w-full p-10 bg-red-50 rounded-[2.5rem] text-7xl font-bold text-[#B22222] font-serif-title text-center shadow-inner">0</div>
-            
             <div class="flex gap-4 mt-6">
-                <button id="download-pdf-btn" class="px-6 py-2 bg-[#B22222] text-white rounded-full text-[10px] uppercase tracking-widest font-bold shadow-md">Baixar Lista (PDF)</button>
-                <button id="reset-list-btn" class="px-6 py-2 border border-red-200 text-red-300 rounded-full text-[10px] uppercase tracking-widest font-bold">Resetar Lista</button>
+                <button id="download-pdf-btn" class="px-6 py-2 bg-[#B22222] text-white rounded-full text-[10px] uppercase tracking-widest font-bold">Baixar PDF</button>
+                <button id="reset-list-btn" class="px-6 py-2 border border-red-200 text-red-300 rounded-full text-[10px] uppercase tracking-widest font-bold">Resetar</button>
             </div>
         </div>
         <div id="guest-list" class="space-y-4"></div>
@@ -204,11 +205,12 @@
             },
 
             startIntro() {
+                // REDUZIDO PARA 2 SEGUNDOS PARA MAIOR VELOCIDADE
                 setTimeout(() => {
                     const main = document.getElementById('app-container');
                     main.classList.remove('opacity-0', 'translate-y-6', 'scale-95');
                     main.classList.add('opacity-100', 'translate-y-0', 'scale-100');
-                }, 3200);
+                }, 2000); 
             },
 
             updateType(type) {
@@ -288,10 +290,9 @@
                 const dataFmt = agora.toLocaleDateString('pt-PT');
                 const horaFmt = agora.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
 
-                // Estilo do Cabeçalho
                 doc.setFont("helvetica", "bold");
                 doc.setFontSize(22);
-                doc.setTextColor(178, 34, 34); // Vermelho Deborah
+                doc.setTextColor(178, 34, 34);
                 doc.text("Deborah's Birthday", 105, 20, { align: "center" });
                 
                 doc.setFontSize(10);
@@ -299,33 +300,22 @@
                 doc.setFont("helvetica", "normal");
                 doc.text(`Lista de Convidados - Gerada em: ${dataFmt} às ${horaFmt}`, 105, 28, { align: "center" });
 
-                const rows = this.state.listaAtiva.map(g => [
-                    g.nome,
-                    g.tipo.toUpperCase(),
-                    g.acompanhantes || "Nenhum"
-                ]);
-
+                const rows = this.state.listaAtiva.map(g => [g.nome, g.tipo.toUpperCase(), g.acompanhantes || "Nenhum"]);
                 doc.autoTable({
                     startY: 35,
-                    head: [['Nome do Convidado', 'Tipo', 'Acompanhantes']],
+                    head: [['Nome', 'Tipo', 'Acompanhantes']],
                     body: rows,
-                    headStyles: { fillStyle: 'f', fillColor: [178, 34, 34], textColor: [255, 255, 255] },
-                    alternateRowStyles: { fillColor: [250, 245, 230] },
-                    margin: { top: 35 }
+                    headStyles: { fillColor: [178, 34, 34] },
+                    alternateRowStyles: { fillColor: [250, 245, 230] }
                 });
-
-                doc.save(`Lista_Deborah_Birthday_${dataFmt.replace(/\//g, '-')}.pdf`);
+                doc.save(`Lista_Deborah_Birthday_${dataFmt}.pdf`);
             },
 
             async resetList() {
-                if (!confirm("Apagar toda a lista de confirmações?")) return;
-                try {
-                    const colRef = collection(this.state.db, 'artifacts', this.config.appId, 'public', 'data', 'presencas');
-                    const snapshot = await getDocs(colRef);
-                    const deletePromises = snapshot.docs.map(ds => deleteDoc(doc(this.state.db, 'artifacts', this.config.appId, 'public', 'data', 'presencas', ds.id)));
-                    await Promise.all(deletePromises);
-                    alert("Lista resetada!");
-                } catch (err) { alert("Erro ao resetar."); }
+                if (!confirm("Apagar tudo?")) return;
+                const snap = await getDocs(collection(this.state.db, 'artifacts', this.config.appId, 'public', 'data', 'presencas'));
+                await Promise.all(snap.docs.map(ds => deleteDoc(doc(this.state.db, 'artifacts', this.config.appId, 'public', 'data', 'presencas', ds.id))));
+                alert("Resetado!");
             }
         };
 
@@ -333,4 +323,3 @@
     </script>
 </body>
 </html>
-
