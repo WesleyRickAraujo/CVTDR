@@ -25,9 +25,23 @@
             background-image: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
             overflow-x: hidden; 
             margin: 0; 
+            -webkit-font-smoothing: antialiased;
         }
 
         .font-serif-title { font-family: 'Cormorant Garamond', serif; }
+
+        /* Substituição do aspect-ratio para compatibilidade Safari Antigo */
+        .card-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 166.66%; /* Proporção 3:5 perfeita em qualquer navegador */
+            height: 0;
+        }
+
+        .card-content {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+        }
 
         /* Hierarquia de Camadas */
         .z-moldura { z-index: 10; }
@@ -37,7 +51,7 @@
         .z-front   { z-index: 50; }
         .z-ui      { z-index: 100; }
 
-        /* Animações Otimizadas (Mais Rápidas) */
+        /* Animações */
         @keyframes revealTitle { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
         @keyframes jump2 { 0%, 100% { transform: rotate(-8deg) translateY(0); } 50% { transform: rotate(-10deg) translateY(-12px); } }
         @keyframes jump6 { 0%, 100% { transform: rotate(8deg) translateY(0); } 50% { transform: rotate(10deg) translateY(-18px); } }
@@ -46,7 +60,7 @@
         @keyframes fadeOutSuccess { from { opacity: 1; } to { opacity: 0; } }
 
         .anim-reveal { animation: revealTitle 1.5s ease-out forwards; }
-        .anim-intro-exit { animation: introOut 0.8s 2.2s forwards; } /* Inicia o fade out mais cedo */
+        .anim-intro-exit { animation: introOut 0.8s 2.2s forwards; }
         .anim-jump-2 { animation: jump2 6s infinite ease-in-out; }
         .anim-jump-6 { animation: jump6 5s infinite ease-in-out; }
         .anim-heart-rise { animation: floatUp 5s ease-in forwards; position: fixed; bottom: -50px; z-index: 200; pointer-events: none; }
@@ -59,6 +73,7 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             color: white;
             transition: all 0.3s ease;
+            -webkit-appearance: none; /* Remove sombras internas no iOS */
         }
         .rsvp-input-inverted:focus {
             background: rgba(255, 255, 255, 0.2);
@@ -66,11 +81,16 @@
             outline: none;
         }
         .rsvp-input-inverted::placeholder { color: rgba(255, 255, 255, 0.4); }
+
+        /* Ajuste para o Dialog no Safari Mobile */
+        dialog::backdrop {
+            background: rgba(0, 0, 0, 0.5);
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center p-4">
 
-    <!-- TELA DE INTRODUÇÃO (TEMPO REDUZIDO) -->
+    <!-- TELA DE INTRODUÇÃO -->
     <aside id="intro-screen" class="fixed inset-0 z-[500] bg-[#FDF5E6] flex flex-col items-center justify-center anim-intro-exit">
         <h1 class="text-5xl md:text-7xl text-[#B22222] font-serif-title font-medium italic anim-reveal text-center px-4">
             Deborah Ramos
@@ -83,24 +103,28 @@
 
     <!-- COMPOSIÇÃO SCRAPBOOK -->
     <main id="app-container" class="relative w-full max-w-sm transition-all duration-700 opacity-0 translate-y-6 scale-95 mt-4 mb-10">
-        <div class="relative shadow-2xl rounded-[2.5rem] overflow-hidden border-[10px] border-white bg-white aspect-[3/5]">
-            <img src="moldura.jpg" class="absolute inset-0 w-full h-full object-fill z-moldura pointer-events-none" alt="Moldura">
-            <img src="num2.png" class="absolute top-[38%] left-[2%] w-36 md:w-44 anim-jump-2 opacity-95 z-numeros" alt="2">
-            <img src="num6.png" class="absolute top-[36%] right-[2%] w-36 md:w-44 anim-jump-6 opacity-95 z-numeros" alt="6">
-            <header class="absolute top-[18%] inset-x-0 text-center z-title px-4 pointer-events-none">
-                <h2 class="text-[#B22222] font-serif-title text-4xl md:text-5xl italic leading-tight drop-shadow-sm">
-                    Deborah's Birthday
-                </h2>
-            </header>
-            <figure class="absolute inset-0 flex items-center justify-center z-person pointer-events-none">
-                <div class="relative mt-36">
-                    <img src="deborah.png" class="w-44 md:w-56" alt="Deborah">
-                </div>
-            </figure>
-            <img src="bolo.png" class="absolute bottom-[0.5rem] left-1/2 -translate-x-1/2 w-48 md:w-60 drop-shadow-2xl z-front" alt="Bolo">
+        
+        <!-- Novo container compatível com Safari Antigo -->
+        <div class="card-container shadow-2xl rounded-[2.5rem] overflow-hidden border-[10px] border-white bg-white">
+            <div class="card-content">
+                <img src="moldura.jpg" class="absolute inset-0 w-full h-full object-fill z-moldura pointer-events-none" alt="Moldura">
+                <img src="num2.png" class="absolute top-[38%] left-[2%] w-36 md:w-44 anim-jump-2 opacity-95 z-numeros" alt="2">
+                <img src="num6.png" class="absolute top-[36%] right-[2%] w-36 md:w-44 anim-jump-6 opacity-95 z-numeros" alt="6">
+                <header class="absolute top-[18%] inset-x-0 text-center z-title px-4 pointer-events-none">
+                    <h2 class="text-[#B22222] font-serif-title text-4xl md:text-5xl italic leading-tight drop-shadow-sm">
+                        Deborah's Birthday
+                    </h2>
+                </header>
+                <figure class="absolute inset-0 flex items-center justify-center z-person pointer-events-none">
+                    <div class="relative mt-36">
+                        <img src="deborah.png" class="w-44 md:w-56" alt="Deborah">
+                    </div>
+                </figure>
+                <img src="bolo.png" class="absolute bottom-[0.5rem] left-1/2 -translate-x-1/2 w-48 md:w-60 drop-shadow-2xl z-front" alt="Bolo">
+            </div>
         </div>
 
-        <!-- SESSÃO RSVP (INVERTIDA) -->
+        <!-- SESSÃO RSVP -->
         <section class="w-full mt-8 bg-[#B22222] p-8 md:p-10 rounded-[3rem] shadow-2xl border border-white/10 relative z-ui text-white">
             <div class="text-center mb-8 pb-6 border-b border-white/20">
                 <p class="font-serif-title text-3xl italic tracking-wide">Di Fiori</p>
@@ -126,14 +150,12 @@
                 </form>
             </div>
 
-            <!-- MENSAGEM SUCESSO TEMPORÁRIA -->
             <div id="success-state" class="hidden-view text-center py-10 transition-all duration-500">
                 <div class="flex justify-center mb-6"><svg width="70" height="70" viewBox="0 0 24 24" fill="white"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
                 <h3 class="text-3xl font-bold text-white font-serif-title italic">Confirmado!</h3>
                 <p class="text-white/70 text-sm mt-4 font-light italic text-center">Obrigado! Mal podemos esperar. ❤️</p>
             </div>
 
-            <!-- RODAPÉ FIXO LOCALIZAÇÃO -->
             <footer class="mt-10 pt-8 border-t border-white/20 text-center">
                 <p class="text-[10px] text-white/50 uppercase font-bold tracking-[0.2em] mb-3">Localização</p>
                 <p class="text-white/80 text-[11px] leading-relaxed mb-6 px-4 font-light italic">Av. Prof. Nilton Lins, 1560A - Parque das Laranjeiras, Manaus - AM</p>
@@ -149,7 +171,7 @@
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><circle cx="3" cy="6" r="1"></circle><circle cx="3" cy="12" r="1"></circle><circle cx="3" cy="18" r="1"></circle></svg>
     </button>
 
-    <dialog id="admin-panel" class="fixed inset-0 z-[300] bg-white p-8 overflow-y-auto w-full h-full border-none m-0">
+    <dialog id="admin-panel" class="fixed inset-0 z-[300] bg-white p-8 overflow-y-auto w-full h-full border-none m-0 shadow-none">
         <div class="flex justify-between items-center border-b pb-6 mb-8">
             <h2 class="text-2xl font-bold text-[#B22222] font-serif-title tracking-widest uppercase text-center w-full">Presenças</h2>
             <button id="close-admin" class="text-4xl">&times;</button>
@@ -158,7 +180,7 @@
         <div class="flex flex-col items-center mb-8">
             <div id="guest-count" class="w-full p-10 bg-red-50 rounded-[2.5rem] text-7xl font-bold text-[#B22222] font-serif-title text-center shadow-inner">0</div>
             <div class="flex gap-4 mt-6">
-                <button id="download-pdf-btn" class="px-6 py-2 bg-[#B22222] text-white rounded-full text-[10px] uppercase tracking-widest font-bold">Baixar PDF</button>
+                <button id="download-pdf-btn" class="px-6 py-2 bg-[#B22222] text-white rounded-full text-[10px] uppercase tracking-widest font-bold shadow-md">Baixar PDF</button>
                 <button id="reset-list-btn" class="px-6 py-2 border border-red-200 text-red-300 rounded-full text-[10px] uppercase tracking-widest font-bold">Resetar</button>
             </div>
         </div>
@@ -185,27 +207,40 @@
             state: { type: 'Individual', db: null, listaAtiva: [] },
 
             async init() {
-                const app = initializeApp(this.config.firebase);
-                const auth = getAuth(app);
-                this.state.db = getFirestore(app);
-                await signInAnonymously(auth);
-                this.bindEvents();
+                try {
+                    const app = initializeApp(this.config.firebase);
+                    const auth = getAuth(app);
+                    this.state.db = getFirestore(app);
+                    
+                    // Tratamento para Safari Private Mode (ignora erro de auth mas permite ver o site)
+                    await signInAnonymously(auth).catch(err => console.log("Safari Auth Guard: Ativo"));
+                    
+                    this.bindEvents();
+                } catch (e) {
+                    console.error("Init fail:", e);
+                    this.bindEvents(); // Tenta bindar eventos mesmo sem firebase
+                }
                 this.startIntro();
             },
 
             bindEvents() {
                 const el = (id) => document.getElementById(id);
-                el('toggle-solo').onclick = () => this.updateType('Individual');
-                el('toggle-group').onclick = () => this.updateType('Grupo');
-                el('rsvp-form').onsubmit = (e) => this.handleRSVP(e);
-                el('master-panel-btn').onclick = () => this.openAdmin();
-                el('close-admin').onclick = () => el('admin-panel').close();
-                el('reset-list-btn').onclick = () => this.resetList();
-                el('download-pdf-btn').onclick = () => this.generatePDF();
+                if(el('toggle-solo')) el('toggle-solo').onclick = () => this.updateType('Individual');
+                if(el('toggle-group')) el('toggle-group').onclick = () => this.updateType('Grupo');
+                if(el('rsvp-form')) el('rsvp-form').onsubmit = (e) => this.handleRSVP(e);
+                if(el('master-panel-btn')) el('master-panel-btn').onclick = () => this.openAdmin();
+                if(el('close-admin')) el('close-admin').onclick = () => this.closeDialog();
+                if(el('reset-list-btn')) el('reset-list-btn').onclick = () => this.resetList();
+                if(el('download-pdf-btn')) el('download-pdf-btn').onclick = () => this.generatePDF();
+            },
+
+            closeDialog() {
+                const modal = document.getElementById('admin-panel');
+                if (modal.close) modal.close();
+                else modal.classList.add('hidden-view');
             },
 
             startIntro() {
-                // REDUZIDO PARA 2 SEGUNDOS PARA MAIOR VELOCIDADE
                 setTimeout(() => {
                     const main = document.getElementById('app-container');
                     main.classList.remove('opacity-0', 'translate-y-6', 'scale-95');
@@ -223,6 +258,7 @@
 
             async handleRSVP(e) {
                 e.preventDefault();
+                if(!this.state.db) { alert("Erro de ligação. Tente novamente fora do modo privativo."); return; }
                 const btn = document.getElementById('submit-btn');
                 const name = document.getElementById('guest-name').value;
                 btn.disabled = true;
@@ -260,7 +296,10 @@
             openAdmin() {
                 const p = prompt("Password:");
                 if (p === "Deborah2026") {
-                    document.getElementById('admin-panel').showModal();
+                    const modal = document.getElementById('admin-panel');
+                    if(modal.showModal) modal.showModal();
+                    else modal.classList.remove('hidden-view');
+
                     const qRef = collection(this.state.db, 'artifacts', this.config.appId, 'public', 'data', 'presencas');
                     onSnapshot(qRef, (snap) => {
                         const list = document.getElementById('guest-list');
