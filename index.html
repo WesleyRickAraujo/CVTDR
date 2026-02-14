@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Deborah's Birthday - 26 Anos</title>
     
-    <!-- External Resources -->
+    <!-- Recursos Externos -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     
@@ -25,30 +25,32 @@
 
         .font-serif-title { font-family: 'Cormorant Garamond', serif; }
 
-        /* Estrita Hierarquia de Camadas */
-        .z-moldura { z-index: 10; }   /* Plano de Fundo Base */
-        .z-numeros { z-index: 20; }   /* Atrás da Deborah */
+        /* Hierarquia de Camadas */
+        .z-moldura { z-index: 10; }   /* Plano de Fundo */
+        .z-numeros { z-index: 20; }   /* Números decorativos */
         .z-person  { z-index: 30; }   /* Deborah */
-        .z-title   { z-index: 40; }   /* Título */
-        .z-front   { z-index: 50; }   /* Bolo (Frente de tudo) */
+        .z-title   { z-index: 40; }   /* Título Birthday */
+        .z-front   { z-index: 50; }   /* Bolo (Frente) */
         .z-ui      { z-index: 100; }  /* Interface do usuário */
 
-        /* Animations */
+        /* Animações */
         @keyframes revealTitle { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
         @keyframes jump2 { 0%, 100% { transform: rotate(-8deg) translateY(0); } 50% { transform: rotate(-10deg) translateY(-12px); } }
         @keyframes jump6 { 0%, 100% { transform: rotate(8deg) translateY(0); } 50% { transform: rotate(10deg) translateY(-18px); } }
         @keyframes introOut { 0% { opacity: 1; } 90% { opacity: 1; } 100% { opacity: 0; visibility: hidden; pointer-events: none; } }
         @keyframes floatUp { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; } }
+        @keyframes fadeOutSuccess { from { opacity: 1; } to { opacity: 0; } }
 
         .anim-reveal { animation: revealTitle 2s ease-out forwards; }
         .anim-intro-exit { animation: introOut 3.5s forwards; }
         .anim-jump-2 { animation: jump2 6s infinite ease-in-out; }
         .anim-jump-6 { animation: jump6 5s infinite ease-in-out; }
         .anim-heart-rise { animation: floatUp 5s ease-in forwards; position: fixed; bottom: -50px; z-index: 200; pointer-events: none; }
+        .anim-fade-out-quick { animation: fadeOutSuccess 0.5s ease-out forwards; }
         
         .hidden-view { display: none !important; }
 
-        /* Sophisticated Inverted Inputs */
+        /* Inputs Estilizados (Modo Invertido) */
         .rsvp-input-inverted {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -65,7 +67,7 @@
 </head>
 <body class="min-h-screen flex flex-col items-center p-4">
 
-    <!-- INTRODUCTION SCREEN -->
+    <!-- TELA DE INTRODUÇÃO -->
     <aside id="intro-screen" class="fixed inset-0 z-[500] bg-[#FDF5E6] flex flex-col items-center justify-center anim-intro-exit">
         <h1 class="text-5xl md:text-7xl text-[#B22222] font-serif-title font-medium italic anim-reveal text-center px-4">
             Deborah Ramos
@@ -76,49 +78,49 @@
         </p>
     </aside>
 
-    <!-- MAIN COMPOSITION -->
+    <!-- COMPOSIÇÃO SCRAPBOOK -->
     <main id="app-container" class="relative w-full max-w-sm transition-all duration-1000 opacity-0 translate-y-6 scale-95 mt-4 mb-10">
         
-        <!-- Scrapbook Card -->
         <div class="relative shadow-2xl rounded-[2.5rem] overflow-hidden border-[10px] border-white bg-white aspect-[3/5]">
-            
-            <!-- CAMADA 1: MOLDURA JPG (Fundo) -->
+            <!-- Camada 1: Moldura -->
             <img src="moldura.jpg" class="absolute inset-0 w-full h-full object-fill z-moldura pointer-events-none" alt="Moldura">
             
-            <!-- CAMADA 2: NÚMEROS (Sobre a moldura) -->
+            <!-- Camada 2: Números -->
             <img src="num2.png" class="absolute top-[38%] left-[2%] w-36 md:w-44 anim-jump-2 opacity-95 z-numeros" alt="2">
             <img src="num6.png" class="absolute top-[36%] right-[2%] w-36 md:w-44 anim-jump-6 opacity-95 z-numeros" alt="6">
 
-            <!-- CAMADA 4: TÍTULO (Garantido à frente da moldura) -->
+            <!-- Camada 4: Título -->
             <header class="absolute top-[18%] inset-x-0 text-center z-title px-4 pointer-events-none">
                 <h2 class="text-[#B22222] font-serif-title text-4xl md:text-5xl italic leading-tight drop-shadow-sm">
                     Deborah's Birthday
                 </h2>
             </header>
 
-            <!-- CAMADA 3: ANIVERSARIANTE (Escala aumentada e integrada) -->
+            <!-- Camada 3: Aniversariante (Escala Aumentada) -->
             <figure class="absolute inset-0 flex items-center justify-center z-person pointer-events-none">
                 <div class="relative mt-36">
                     <img src="deborah.png" class="w-44 md:w-56" alt="Deborah">
                 </div>
             </figure>
 
-            <!-- CAMADA 5: BOLO (Integrado com a foto, escala 5/7 ajustada) -->
+            <!-- Camada 5: Bolo (Sobreposto e Integrado) -->
             <img src="bolo.png" class="absolute bottom-[0.5rem] left-1/2 -translate-x-1/2 w-48 md:w-60 drop-shadow-2xl z-front" alt="Bolo">
         </div>
 
-        <!-- RSVP SECTION (Sessão Invertida e Vibrante) -->
+        <!-- SESSÃO RSVP (Vibrante) -->
         <section class="w-full mt-8 bg-[#B22222] p-8 md:p-10 rounded-[3rem] shadow-2xl border border-white/10 relative z-ui text-white">
             
+            <!-- Cabeçalho Fixo do Card Vermelho -->
             <div class="text-center mb-8 pb-6 border-b border-white/20">
                 <p class="font-serif-title text-3xl italic tracking-wide">Di Fiori</p>
                 <div class="flex justify-center items-center gap-4 mt-3">
-                    <span class="text-white/90 text-xs font-bold tracking-widest uppercase">Dia 21</span>
+                    <span class="text-white/90 text-xs font-bold tracking-widest uppercase">Dia 20</span>
                     <span class="w-1.5 h-1.5 bg-white/40 rounded-full"></span>
                     <span class="text-white/90 text-xs font-bold tracking-widest uppercase">18:30h</span>
                 </div>
             </div>
 
+            <!-- Formulário de Confirmação -->
             <div id="rsvp-interface">
                 <div class="text-center mb-8">
                     <h2 class="text-white font-bold text-2xl uppercase tracking-[0.2em] font-serif-title italic">Confirmação</h2>
@@ -126,7 +128,7 @@
 
                 <form id="rsvp-form" class="space-y-5">
                     <input 
-                        type="text" id="guest-name" placeholder="Digite seu nome" required
+                        type="text" id="guest-name" placeholder="Escreva o seu nome completo" required
                         class="w-full p-4 rsvp-input-inverted text-center text-lg font-light rounded-2xl"
                     >
 
@@ -148,22 +150,10 @@
                         Confirmar Agora
                     </button>
                 </form>
-
-                <footer class="mt-10 pt-8 border-t border-white/20 text-center">
-                    <p class="text-[10px] text-white/50 uppercase font-bold tracking-[0.2em] mb-3">Localização</p>
-                    <p class="text-white/80 text-[11px] leading-relaxed mb-6 px-4 font-light italic">
-                        Av. Prof. Nilton Lins, 1560A - Parque das Laranjeiras, Manaus - AM
-                    </p>
-                    <a href="https://www.google.com/maps/search/?api=1&query=Di+Fiori,+Av.+Prof.+Nilton+Lins,+1560A+-+Parque+das+Laranjeiras,+Manaus+-+AM,+69058-400" 
-                       target="_blank" 
-                       class="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/20 text-white font-bold text-[10px] tracking-widest uppercase hover:bg-white/10 transition-all">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                        Abrir no Maps
-                    </a>
-                </footer>
             </div>
 
-            <div id="success-state" class="hidden-view text-center py-10">
+            <!-- Mensagem de Sucesso Temporária -->
+            <div id="success-state" class="hidden-view text-center py-10 transition-all duration-500">
                 <div class="flex justify-center mb-6">
                     <svg width="70" height="70" viewBox="0 0 24 24" fill="white">
                         <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
@@ -172,15 +162,29 @@
                 <h3 class="text-3xl font-bold text-white font-serif-title italic">Confirmado!</h3>
                 <p class="text-white/70 text-sm mt-4 font-light italic text-center">Obrigado! Mal podemos esperar. ❤️</p>
             </div>
+
+            <!-- Rodapé Fixo (Localização) - Fora da rsvp-interface para não ser escondido -->
+            <footer class="mt-10 pt-8 border-t border-white/20 text-center">
+                <p class="text-[10px] text-white/50 uppercase font-bold tracking-[0.2em] mb-3">Localização</p>
+                <p class="text-white/80 text-[11px] leading-relaxed mb-6 px-4 font-light italic">
+                    Av. Prof. Nilton Lins, 1560A - Parque das Laranjeiras, Manaus - AM
+                </p>
+                <a href="https://www.google.com/maps/search/?api=1&query=Di+Fiori,+Av.+Prof.+Nilton+Lins,+1560A+-+Parque+das+Laranjeiras,+Manaus+-+AM,+69058-400" 
+                   target="_blank" 
+                   class="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/20 text-white font-bold text-[10px] tracking-widest uppercase hover:bg-white/10 transition-all">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    Abrir no Maps
+                </a>
+            </footer>
         </section>
     </main>
 
-    <!-- Master Admin Access -->
+    <!-- Botão Administrativo Discreto -->
     <button id="master-panel-btn" class="fixed bottom-6 right-6 p-4 bg-white/10 rounded-full text-white/5 z-[150]">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><circle cx="3" cy="6" r="1"></circle><circle cx="3" cy="12" r="1"></circle><circle cx="3" cy="18" r="1"></circle></svg>
     </button>
 
-    <!-- Admin Panel -->
+    <!-- Painel Administrativo -->
     <dialog id="admin-panel" class="fixed inset-0 z-[300] bg-white p-8 overflow-y-auto w-full h-full border-none m-0">
         <div class="flex justify-between items-center border-b pb-6 mb-8">
             <h2 class="text-2xl font-bold text-[#B22222] font-serif-title tracking-widest uppercase text-center w-full">Presenças</h2>
@@ -189,8 +193,6 @@
         
         <div class="flex flex-col items-center mb-8">
             <div id="guest-count" class="w-full p-10 bg-red-50 rounded-[2.5rem] text-7xl font-bold text-[#B22222] font-serif-title text-center shadow-inner">0</div>
-            
-            <!-- Botão de Resetar Lista -->
             <button id="reset-list-btn" class="mt-4 text-[10px] text-red-300 uppercase tracking-widest hover:text-[#B22222] transition-colors font-bold">
                 Resetar Lista de Confirmados
             </button>
@@ -269,9 +271,22 @@
                         acompanhantes: this.state.type === 'Grupo' ? document.getElementById('guest-others').value : "",
                         timestamp: serverTimestamp()
                     });
+                    
+                    // Mostra Sucesso e Oculta Formulário
                     document.getElementById('rsvp-interface').classList.add('hidden-view');
                     document.getElementById('success-state').classList.remove('hidden-view');
                     this.celebrate();
+
+                    // MENSAGEM TEMPORÁRIA: Some após 3 segundos
+                    setTimeout(() => {
+                        const successEl = document.getElementById('success-state');
+                        successEl.classList.add('anim-fade-out-quick');
+                        setTimeout(() => {
+                            successEl.classList.add('hidden-view');
+                            successEl.classList.remove('anim-fade-out-quick');
+                        }, 500);
+                    }, 3000);
+
                 } catch (err) {
                     btn.disabled = false;
                     btn.innerText = "Confirmar Agora";
@@ -284,7 +299,6 @@
                     h.className = 'anim-heart-rise';
                     h.style.left = Math.random() * 100 + '%';
                     h.style.animationDelay = Math.random() * 3 + 's';
-                    // Corrigido: Corações agora são Vermelho Deborah
                     h.innerHTML = `<svg width="${15 + Math.random()*25}" height="40" viewBox="0 0 24 24" fill="#B22222"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
                     document.body.appendChild(h);
                 }
@@ -313,30 +327,22 @@
                 }
             },
 
-            /**
-             * Função para resetar a lista de presenças
-             * Percorre todos os documentos da coleção e os deleta.
-             */
             async resetList() {
-                const check = confirm("ATENÇÃO: Tens a certeza que queres APAGAR TODA a lista de confirmações? Esta ação não pode ser desfeita.");
+                const check = confirm("Deseja APAGAR TODA a lista de confirmações?");
                 if (!check) return;
-
-                const secondCheck = confirm("Confirmação final: Desejas realmente resetar a lista para zero?");
+                const secondCheck = confirm("Confirmação final: Desejas realmente resetar?");
                 if (!secondCheck) return;
 
                 try {
                     const colRef = collection(this.state.db, 'artifacts', this.config.appId, 'public', 'data', 'presencas');
                     const snapshot = await getDocs(colRef);
-                    
                     const deletePromises = snapshot.docs.map(docSnap => 
                         deleteDoc(doc(this.state.db, 'artifacts', this.config.appId, 'public', 'data', 'presencas', docSnap.id))
                     );
-
                     await Promise.all(deletePromises);
-                    alert("A lista foi resetada com sucesso!");
+                    alert("A lista foi resetada!");
                 } catch (err) {
-                    console.error("Erro ao resetar lista:", err);
-                    alert("Ocorreu um erro ao tentar resetar a lista.");
+                    alert("Erro ao resetar.");
                 }
             }
         };
@@ -345,4 +351,3 @@
     </script>
 </body>
 </html>
-
